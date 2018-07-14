@@ -8,7 +8,7 @@ namespace JumpingJack.UI
 
         [SerializeField] private GameObject backgroundPanel;
 
-        LoadingScreenAnimation loadingScreenAnimation;
+        [SerializeField] LoadingScreenAnimation loadingScreenAnimation;
 
         [HideInInspector] public bool init = false;
         bool animationFinished = false;
@@ -35,7 +35,6 @@ namespace JumpingJack.UI
         // Use this for initialization
         void Start()
         {
-            loadingScreenAnimation = GetComponentInChildren<LoadingScreenAnimation>();
         }
 
         public void Init()

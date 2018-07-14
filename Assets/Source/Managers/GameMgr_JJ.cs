@@ -37,6 +37,7 @@ namespace JumpingJack.Managers
 
         // Use this for initialization
         private IEnumerator Start() {
+            yield return new WaitForSeconds(0.1f);
             // Start Tic
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
 
