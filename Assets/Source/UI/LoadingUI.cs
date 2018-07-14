@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace JumpingJack.UI
@@ -7,10 +6,12 @@ namespace JumpingJack.UI
     public class LoadingUI : MonoBehaviour
     {
 
-        private Animator _titleAnimator;
+        [SerializeField] private GameObject backgroundPanel;
 
-        [SerializeField] float timer = 4.5f;
+        LoadingScreenAnimation loadingScreenAnimation;
+
         [HideInInspector] public bool init = false;
+        bool animationFinished = false;
 
         #region Singleton
         public static LoadingUI Instance { get; private set; }
@@ -34,25 +35,26 @@ namespace JumpingJack.UI
         // Use this for initialization
         void Start()
         {
+            loadingScreenAnimation = GetComponentInChildren<LoadingScreenAnimation>();
         }
 
         public void Init()
         {
-            // Loading animations...
-
             init = true;
         }
 
         public IEnumerator Play()
         {
-            // TODO Lanzar animaciones
+            backgroundPanel.SetActive(true);
+            loadingScreenAnimation.IntroAnimation();
 
-            yield return new WaitForSeconds(timer);
+            yield return new WaitWhile(() => !loadingScreenAnimation.AnimFinished);
         }
-
+        
         public void Stop()
         {
-
+            loadingScreenAnimation.OutAnimation();
+            backgroundPanel.SetActive(false);
         }
 
 
