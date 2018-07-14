@@ -2,15 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioMgr : MonoBehaviour {
+namespace JumpingJack.Managers
+{
+    public class AudioMgr : MonoBehaviour
+    {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-}
+
+        #region Singleton
+        public static AudioMgr Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null)
+            {
+                if (Instance != this)
+                {
+                    DestroyImmediate(this);
+                }
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
+        #endregion
+
+
+        // Use this for initialization
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    } // Class
+} // namespace
