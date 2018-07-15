@@ -7,9 +7,9 @@ namespace JumpingJack.Managers
     public class InputMgr : MonoBehaviour
     {
 
-        public bool RightPressed { get; private set; }
-        public bool LeftPressed  { get; private set; }
-        public bool JumpPressed  { get; private set; }
+        public static bool RightPressed { get; private set; }
+        public static bool LeftPressed  { get; private set; }
+        public static bool JumpPressed  { get; private set; }
 
 
         public static InputMgr Instance { get; private set; }

@@ -7,9 +7,13 @@ using JumpingJack.UI;
 namespace JumpingJack.Managers
 {
     public class GameMgr_JJ : MonoBehaviour {
+        
+        private enum States {   Starting,
+                                Playing,
+                                Paused,}
+        private States state = States.Starting;
 
-
-        private float _tic = 0.087f;
+        [SerializeField] private float _tic = 0.087f;
 
         private bool init = false;
         
@@ -38,17 +42,17 @@ namespace JumpingJack.Managers
         // Use this for initialization
         private IEnumerator Start() {
             yield return new WaitForSeconds(0.1f);
-            // Start Tic
+
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
-
+            
             var localInit = StartCoroutine(Init());
-
+            
             yield return loadingCoroutine;
             yield return localInit;
 
             LoadingUI.Instance.Stop();
-            
-            LevelMgr.Instance.PlayNewGame();
+
+            PlayGame();
         }
 
         // Update is called once per frame
@@ -73,10 +77,24 @@ namespace JumpingJack.Managers
         {
             while (true)
             {
+                if (state == States.Playing)
+                {
+                    if (OnTic != null)
+                        OnTic();
+                }
                 yield return new WaitForSeconds(_tic);
-                if(OnTic != null)
-                    OnTic();
             }
+        }
+
+        public void PlayGame()
+        {
+            LevelMgr.Instance.PlayNewGame();
+            state = States.Playing;
+        }
+
+        public void PauseGame()
+        {
+            state = States.Paused;
         }
 
         public void ResetGame()

@@ -42,5 +42,12 @@ namespace JumpingJack.Utilities
             return tempV3;
         }
 
+        public static Vector3 CellToWorld(Vector2 cell)
+        {
+            tempV3.x = origin.x + cell.x * units;
+            tempV3.y = origin.y + cell.y * units;
+            return tempV3;
+        }
+
     } // CLass
 } // namespace
