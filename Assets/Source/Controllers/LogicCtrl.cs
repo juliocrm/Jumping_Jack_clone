@@ -60,8 +60,18 @@ namespace JumpingJack.Controllers
         public void UpdateLogic()
         {
             // TODO Test Avatar contacts
+            if(!TestEnemyContact() && !TestFallingInHoles())
+                ApplyInput();
+        }
 
-            ApplyInput();  
+        public bool TestFallingInHoles()
+        {
+            return false;
+        }
+
+        public bool TestEnemyContact()
+        {
+            return false;
         }
 
         private void ApplyInput()
