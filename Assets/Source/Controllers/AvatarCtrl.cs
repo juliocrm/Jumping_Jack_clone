@@ -76,7 +76,6 @@ namespace JumpingJack.Controllers
             avatarState.Tic(frame);
             if(actualKickedFrames != 0)
             {
-                Debug.Log(actualKickedFrames);
                 actualKickedFrames--;
                 if (actualKickedFrames == 0)
                 {
@@ -138,12 +137,18 @@ namespace JumpingJack.Controllers
 
         public void Kicked()
         {
+            if (actualState == States.KnockOut)
+                return;
+
             avatarState = kickedState;
             actualState = States.Kicked;
         }
 
         public void Falling()
         {
+            if (actualState == States.KnockOut)
+                return;
+
             avatarState = fallingState;
             actualState = States.Falling;
         }
@@ -281,17 +286,20 @@ namespace JumpingJack.Controllers
         public override void Tic(int frame)
         {
             if(frame == 1)
-                AvatarCtrl.Instance.AddKickedFrames(8);
+                AvatarCtrl.Instance.AddKickedFrames(55); // 2.93sec
+            if (frame == 4)
+                AvatarCtrl.Instance.KnockOut();
         }
     }
 
     public class AvatarKicked : AvatarStateBase
     {
-        int frameCounter = 0;
         public override void Tic(int frame)
         {
             if(frame == 1)
-                AvatarCtrl.Instance.AddKickedFrames(16);
+                AvatarCtrl.Instance.AddKickedFrames(65); //1.91sec
+            if (frame == 4)
+                AvatarCtrl.Instance.KnockOut();
         }
     }
 
@@ -301,7 +309,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                AvatarCtrl.Instance.AddKickedFrames(24);
+                AvatarCtrl.Instance.AddKickedFrames(115); // 3.05sec
             }
             if (frame == 4)
             {
