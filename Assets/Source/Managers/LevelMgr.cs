@@ -49,6 +49,7 @@ namespace JumpingJack.Managers
         {
             Debug.Log("Playing game");
             // TODO Dibujar elementos
+            LogicCtrl.Instance.PlayLevel(0);
             
             AvatarCtrl.Instance.ResetAvatar();
         }

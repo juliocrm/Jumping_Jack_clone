@@ -20,6 +20,7 @@ namespace JumpingJack.Managers
         
         public delegate void TIC();
         public static event TIC OnTic;
+        private Coroutine ticCoroutine;
 
         #region Singleton 
         public static GameMgr_JJ Instance { get; private set; }
@@ -65,8 +66,6 @@ namespace JumpingJack.Managers
 
         private IEnumerator Init()
         {
-            StartCoroutine(TIC_Coroutine());
-
             PersistenceMgr.Instance.Init();
             yield return new WaitWhile(() => !PersistenceMgr.Instance.Loaded);
 
@@ -103,6 +102,16 @@ namespace JumpingJack.Managers
         public void PauseGame()
         {
             state = States.Paused;
+        }
+
+        public void StopTics()
+        {
+            StopCoroutine(ticCoroutine);
+        }
+
+        public void PlayTics()
+        {
+            ticCoroutine = StartCoroutine(TIC_Coroutine());
         }
 
         public void ResetGame()
