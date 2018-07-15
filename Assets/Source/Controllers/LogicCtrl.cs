@@ -44,32 +44,41 @@ namespace JumpingJack.Controllers
 
         public void Tic()
         {
-            
+            tick++;
+            //if (AvatarCtrl.Instance.actualState == AvatarCtrl.States.Standing)
+            //    ApplyInput();
+
+            AvatarCtrl.Instance.Tic(tick);
+
             if (tick == 4)
             {
-                AvatarCtrl.Instance.Tic(tick);
-
                 UpdateLogic();
                 tick = 0;
             }
-            tick++;
         }
 
         public void UpdateLogic()
         {
             // TODO Test Avatar contacts
 
+            ApplyInput();  
+        }
+
+        private void ApplyInput()
+        {
             AvatarCtrl.Instance.Standing();
-            if (InputMgr.LeftPressed){
+            if (InputMgr.LeftPressed)
+            {
                 AvatarCtrl.Instance.RunLeft();
             }
-            if (InputMgr.RightPressed) { 
+            if (InputMgr.RightPressed)
+            {
                 AvatarCtrl.Instance.RunRight();
             }
             if (InputMgr.JumpPressed)
             {
                 AvatarCtrl.Instance.Jump();
-            }                
+            }
         }
 
         public void ResetGame()

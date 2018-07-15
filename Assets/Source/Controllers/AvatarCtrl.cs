@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
 using JumpingJack.Utilities;
+
+using JumpingJack.Managers;
 
 namespace JumpingJack.Controllers
 {
@@ -11,13 +13,19 @@ namespace JumpingJack.Controllers
         private Vector2 _InitialPosition = Vector2.zero;
         [HideInInspector] public Vector2 cellPosition;
         [HideInInspector] public Transform _transform;
+        
+        private float actualKickedFrames = 0;
 
-        private enum States {   Standing,
+        public enum States {    Standing,
                                 RunningRight,
                                 RunningLeft,
                                 Jumping,
                                 Falling,
-                                Kicked}
+                                Kicked,
+                                BadJump,
+                                KnockOut}
+
+        public States actualState = States.Standing;
 
 
         #region Singleton
@@ -38,8 +46,18 @@ namespace JumpingJack.Controllers
             }
         }
         #endregion
-
-
+                
+        #region Creando estados
+        private AvatarStateBase avatarState;
+        private AvatarRunnigRight runningRightState = new AvatarRunnigRight();
+        private AvatarRunningLeft runningLeftState = new AvatarRunningLeft();
+        private AvatarJumping jumpingState = new AvatarJumping();
+        private AvatarStanding standingState = new AvatarStanding();
+        private AvatarKicked kickedState = new AvatarKicked();
+        private AvatarBadJump badJumpState = new AvatarBadJump();
+        private AvatarFalling fallingState = new AvatarFalling();
+        private AvatarKnockOut knockOutState = new AvatarKnockOut();
+        #endregion
 
         // Use this for initialization
         void Start()
@@ -48,32 +66,101 @@ namespace JumpingJack.Controllers
             avatarState = standingState;
         }
 
+        public void AddKickedFrames(int frames)
+        {
+            actualKickedFrames += frames;
+        }
+
         public void Tic(int frame)
         {
             avatarState.Tic(frame);
+            if(actualKickedFrames != 0)
+            {
+                Debug.Log(actualKickedFrames);
+                actualKickedFrames--;
+                if (actualKickedFrames == 0)
+                {
+                    actualState = States.Standing;
+                    Standing();
+                }
+            }
         }
 
         #region Asignación de estados
 
         public void RunLeft()
         {
-            avatarState = runningLeftState;
+            if (actualState == States.RunningRight
+                || actualState == States.Standing)
+            {
+                avatarState = runningLeftState;
+                actualState = States.RunningLeft;
+            }
         }
 
         public void RunRight()
         {
-
-            avatarState = runningRightState;
+            if (actualState == States.RunningLeft
+                || actualState == States.Standing)
+            {
+                avatarState = runningRightState;
+                actualState = States.RunningRight;
+            }
         }
 
         public void Jump()
         {
-            avatarState = jumpingState;
+            if (actualState == States.RunningRight
+                || actualState == States.RunningLeft
+                || actualState == States.Standing)
+            {
+                avatarState = jumpingState;
+                actualState = States.Jumping;
+            }
         }
 
         public void Standing()
         {
+            if (actualState == States.Jumping)
+                return;
+            if (actualState == States.Kicked)
+                return;
+            if (actualState == States.Falling)
+                return;
+            if (actualState == States.BadJump)
+                return;
+            if (actualState == States.KnockOut)
+                return;
+
             avatarState = standingState;
+            actualState = States.Standing;
+        }
+
+        public void Kicked()
+        {
+            avatarState = kickedState;
+            actualState = States.Kicked;
+        }
+
+        public void Falling()
+        {
+            avatarState = fallingState;
+            actualState = States.Falling;
+        }
+
+        public void BadJump()
+        {
+            if (actualState == States.KnockOut)
+                return;
+
+            avatarState = badJumpState;
+            actualState = States.BadJump;
+        }
+
+        public void KnockOut()
+        {
+            avatarState = knockOutState;
+            actualState = States.KnockOut;
         }
 
         #endregion
@@ -90,11 +177,6 @@ namespace JumpingJack.Controllers
             _InitialPosition = position;
         }
 
-        private AvatarStateBase avatarState;
-        private AvatarRunnigRight runningRightState = new AvatarRunnigRight();
-        private AvatarRunningLeft runningLeftState = new AvatarRunningLeft();
-        private AvatarJumping jumpingState = new AvatarJumping();
-        private AvatarStanding standingState = new AvatarStanding();
 
     } // Class
 
@@ -163,7 +245,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-
+                GameMgr_JJ.Instance.MultiplyGameSpeed(2);
             }
             if (frame == 4)
             {
@@ -174,9 +256,13 @@ namespace JumpingJack.Controllers
                 }
                 else
                 {
+                    GameMgr_JJ.Instance.MultiplyGameSpeed(1f);
+
                     AvatarCtrl.Instance.cellPosition.y += 3;
 
                     AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
+
+                    AvatarCtrl.Instance.actualState = AvatarCtrl.States.Standing;
                 }
             }
         }
@@ -187,6 +273,48 @@ namespace JumpingJack.Controllers
         public override void Tic(int frame)
         {
 
+        }
+    }
+
+    public class AvatarFalling : AvatarStateBase
+    {
+        public override void Tic(int frame)
+        {
+            if(frame == 1)
+                AvatarCtrl.Instance.AddKickedFrames(8);
+        }
+    }
+
+    public class AvatarKicked : AvatarStateBase
+    {
+        int frameCounter = 0;
+        public override void Tic(int frame)
+        {
+            if(frame == 1)
+                AvatarCtrl.Instance.AddKickedFrames(16);
+        }
+    }
+
+    public class AvatarBadJump : AvatarStateBase
+    {
+        public override void Tic(int frame)
+        {
+            if (frame == 1)
+            {
+                AvatarCtrl.Instance.AddKickedFrames(24);
+            }
+            if (frame == 4)
+            {
+                AvatarCtrl.Instance.KnockOut();
+            }
+        }
+    }
+
+    public class AvatarKnockOut : AvatarStateBase
+    {
+        public override void Tic(int frame)
+        {
+            // KnockOut Animation...
         }
     }
 

@@ -14,6 +14,7 @@ namespace JumpingJack.Managers
         private States state = States.Starting;
 
         [SerializeField] private float _tic = 0.087f;
+        private float actualTic;
 
         private bool init = false;
         
@@ -42,6 +43,8 @@ namespace JumpingJack.Managers
         // Use this for initialization
         private IEnumerator Start() {
             yield return new WaitForSeconds(0.1f);
+
+            actualTic = _tic;
 
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
             
@@ -82,8 +85,13 @@ namespace JumpingJack.Managers
                     if (OnTic != null)
                         OnTic();
                 }
-                yield return new WaitForSeconds(_tic);
+                yield return new WaitForSeconds(actualTic);
             }
+        }
+
+        public void MultiplyGameSpeed(float multiplier)
+        {
+            actualTic = _tic * multiplier;
         }
 
         public void PlayGame()
