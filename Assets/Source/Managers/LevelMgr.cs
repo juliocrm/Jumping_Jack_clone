@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JumpingJack.Controllers;
 
 namespace JumpingJack.Managers
 {
@@ -40,17 +41,22 @@ namespace JumpingJack.Managers
 
         public void Init()
         {
+            AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
             GameMgr_JJ.OnTic += Tic;
         }
 
         public void PlayNewGame()
         {
             Debug.Log("Playing game");
+            // TODO Dibujar elementos
+            LogicCtrl.Instance.PlayLevel(0);
+            
+            AvatarCtrl.Instance.ResetAvatar();
         }
 
         private void Tic()
         {
-            // 
+            LogicCtrl.Instance.Tic();
         }
 
         private void OnDestroy()

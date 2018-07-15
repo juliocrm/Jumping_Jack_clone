@@ -7,14 +7,20 @@ using JumpingJack.UI;
 namespace JumpingJack.Managers
 {
     public class GameMgr_JJ : MonoBehaviour {
+        
+        private enum States {   Starting,
+                                Playing,
+                                Paused,}
+        private States state = States.Starting;
 
-
-        private float _tic = 0.087f;
+        [SerializeField] private float _tic = 0.087f;
+        private float actualTic;
 
         private bool init = false;
         
         public delegate void TIC();
         public static event TIC OnTic;
+        private Coroutine ticCoroutine;
 
         #region Singleton 
         public static GameMgr_JJ Instance { get; private set; }
@@ -38,17 +44,19 @@ namespace JumpingJack.Managers
         // Use this for initialization
         private IEnumerator Start() {
             yield return new WaitForSeconds(0.1f);
-            // Start Tic
+
+            actualTic = _tic;
+
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
-
+            
             var localInit = StartCoroutine(Init());
-
+            
             yield return loadingCoroutine;
             yield return localInit;
 
             LoadingUI.Instance.Stop();
-            
-            LevelMgr.Instance.PlayNewGame();
+
+            PlayGame();
         }
 
         // Update is called once per frame
@@ -58,8 +66,6 @@ namespace JumpingJack.Managers
 
         private IEnumerator Init()
         {
-            StartCoroutine(TIC_Coroutine());
-
             PersistenceMgr.Instance.Init();
             yield return new WaitWhile(() => !PersistenceMgr.Instance.Loaded);
 
@@ -73,10 +79,39 @@ namespace JumpingJack.Managers
         {
             while (true)
             {
-                yield return new WaitForSeconds(_tic);
-                if(OnTic != null)
-                    OnTic();
+                if (state == States.Playing)
+                {
+                    if (OnTic != null)
+                        OnTic();
+                }
+                yield return new WaitForSeconds(actualTic);
             }
+        }
+
+        public void MultiplyGameSpeed(float multiplier)
+        {
+            actualTic = _tic * multiplier;
+        }
+
+        public void PlayGame()
+        {
+            LevelMgr.Instance.PlayNewGame();
+            state = States.Playing;
+        }
+
+        public void PauseGame()
+        {
+            state = States.Paused;
+        }
+
+        public void StopTics()
+        {
+            StopCoroutine(ticCoroutine);
+        }
+
+        public void PlayTics()
+        {
+            ticCoroutine = StartCoroutine(TIC_Coroutine());
         }
 
         public void ResetGame()
