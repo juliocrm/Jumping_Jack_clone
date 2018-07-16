@@ -120,19 +120,25 @@ namespace JumpingJack.Controllers
             return dir;                    
         }
 
-        public bool ExistHoleIn(Vector2 avatarCell)
+        public bool ExistHoleUp(Vector2 avatarCell)
         {
             avatarCell.y += 3;
             for(int i = 0; i < holesList.Count; i++)
             {
-                if (holesList[i].cellPos.x <= avatarCell.x &&
-                    avatarCell.x <= holesList[i].cellPos.x + 3)
+                if (holesList[i].cellPos.x == avatarCell.x ||
+                    holesList[i].cellPos.x == avatarCell.x + 1)
                 {
                     if (holesList[i].cellPos.y == avatarCell.y)
                         return true;
                 }
             }
             return false;
+        }
+
+        public bool ExistHoleDown(Vector2 avatarCell)
+        {
+            avatarCell.y -= 3;
+            return ExistHoleUp(avatarCell);
         }
 
     } // Class

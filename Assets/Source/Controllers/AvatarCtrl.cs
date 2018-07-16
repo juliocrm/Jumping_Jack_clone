@@ -284,10 +284,17 @@ namespace JumpingJack.Controllers
     {
         public override void Tic(int frame)
         {
-            if(frame == 1)
+            if (frame == 1)
+            {
+                AvatarCtrl.Instance.cellPosition.y -= 3;
+
                 AvatarCtrl.Instance.AddKickedFrames(55); // 2.93sec
+            }
             if (frame == 4)
+            {
                 AvatarCtrl.Instance.KnockOut();
+                AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
+            }
         }
     }
 
