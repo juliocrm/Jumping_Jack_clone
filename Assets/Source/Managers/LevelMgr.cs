@@ -45,6 +45,7 @@ namespace JumpingJack.Managers
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
             HolesCtrl.Instance.Init();
+            EnemiesCtrl.Instance.Init(1);
 
             GameMgr_JJ.OnTic += Tic;
 

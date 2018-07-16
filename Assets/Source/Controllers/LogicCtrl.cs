@@ -68,6 +68,7 @@ namespace JumpingJack.Controllers
             
 
             HolesCtrl.Instance.Tic(tick);
+            EnemiesCtrl.Instance.Tic(tick);
 
             AvatarCtrl.Instance.Tic(tick);
             if (tick == 4)
