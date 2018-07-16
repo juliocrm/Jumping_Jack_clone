@@ -21,6 +21,7 @@ namespace JumpingJack.Controllers
 
         private State logicState = State.Default;
 
+        private int skipFallingTest = 0;
 
         #region Singleton
         public static LogicCtrl Instance { get; private set; }
@@ -64,9 +65,11 @@ namespace JumpingJack.Controllers
             tick++;
             //if (AvatarCtrl.Instance.actualState == AvatarCtrl.States.Standing)
             //    ApplyInput();
-                        
-            AvatarCtrl.Instance.Tic(tick);
+            
 
+            HolesCtrl.Instance.Tic(tick);
+
+            AvatarCtrl.Instance.Tic(tick);
             if (tick == 4)
             {
                 if (logicState == State.FinishingLevel)
@@ -79,10 +82,10 @@ namespace JumpingJack.Controllers
 
         public void UpdateLogic()
         {
-            if(TestFallingInHoles() == 1) {
+            if (TestFallingInHoles() == 1) {
                 AvatarCtrl.Instance.Falling();
             }
-            else if (TestFallingInHoles() == 2){
+            else if (TestFallingInHoles() == 2) {
                 AvatarCtrl.Instance.Falling();
                 avatarLives--;
                 if (avatarLives == 0)
@@ -90,16 +93,28 @@ namespace JumpingJack.Controllers
                 return;
             }
 
-            if (TestEnemyContact())
-                AvatarCtrl.Instance.Kicked();
+            if (skipFallingTest == 0)
+            {
+                if (TestEnemyContact())
+                {
+                    AvatarCtrl.Instance.Kicked();
+                    return;
+                }
+            }
             else
-                ApplyInput();
+                skipFallingTest--;
+
+            ApplyInput();
         }
 
         public int TestFallingInHoles()
         {
-            return 0; // No cae
-            //return 1; // Cayendo
+            if(HolesCtrl.Instance.ExistHoleDown(AvatarCtrl.Instance.cellPosition))
+                return 1; // cayendo
+
+            else
+                return 0; // No cae
+            
             //if (AvatarCtrl.Instance.cellPosition.y - 3 == 0)
             //    return 2; // Cayendo en última línea
             
@@ -113,9 +128,12 @@ namespace JumpingJack.Controllers
 
         public int TestJump()
         {
+            if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
+                return 0;
+            
             if (AvatarCtrl.Instance.cellPosition.y + 3 == 24)
                 return 2; // Última línea
-            // return 0; // Incorrecto
+                        
             return 1; // Salta a siguiente
         }
 
@@ -135,15 +153,20 @@ namespace JumpingJack.Controllers
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
-                else if(TestJump() == 1)
-                    AvatarCtrl.Instance.Jump();
 
+                else if (TestJump() == 1)
+                {
+                    skipFallingTest += 8;
+                    HolesCtrl.Instance.AddHole();
+                    AvatarCtrl.Instance.Jump();
+                }
                 else if (TestJump() == 2)
                 {
                     // Avatar Last Jump Anim
+                    skipFallingTest += 8;
+                    HolesCtrl.Instance.AddHole();
                     logicState = State.FinishingLevel;
                 }
-
             }
         }
 

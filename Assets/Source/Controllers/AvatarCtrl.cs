@@ -173,7 +173,7 @@ namespace JumpingJack.Controllers
         public void ResetAvatar()
         {
             cellPosition = _InitialPosition;
-
+            SetSize();
             _transform.position = GameScreenCoords.CellToWorld(14,0);
         }
 
@@ -182,13 +182,19 @@ namespace JumpingJack.Controllers
             _InitialPosition = position;
         }
 
+        private void SetSize()
+        {
+            Debug.Log("Units" + GameScreenCoords.Units);
+            transform.localScale = new Vector3(GameScreenCoords.Units,
+                                                GameScreenCoords.Units,1);
+        }
+
 
     } // Class
 
     public class AvatarStateBase
     {
         virtual public void Tic(int frame) {
-            Debug.Log("Aquí no debe llegar");
         }
     }
 
@@ -285,10 +291,17 @@ namespace JumpingJack.Controllers
     {
         public override void Tic(int frame)
         {
-            if(frame == 1)
+            if (frame == 1)
+            {
+                AvatarCtrl.Instance.cellPosition.y -= 3;
+
                 AvatarCtrl.Instance.AddKickedFrames(55); // 2.93sec
+            }
             if (frame == 4)
+            {
                 AvatarCtrl.Instance.KnockOut();
+                AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
+            }
         }
     }
 
