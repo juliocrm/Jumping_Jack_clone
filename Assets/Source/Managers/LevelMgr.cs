@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using JumpingJack.Controllers;
+using JumpingJack.Utilities;
 
 namespace JumpingJack.Managers
 {
     public class LevelMgr : MonoBehaviour
     {
+        [SerializeField] private GameObject linesPrefab;
 
         #region Singleton
         public static LevelMgr Instance { get; private set; }
@@ -50,6 +52,7 @@ namespace JumpingJack.Managers
 
         public void PlayNewGame()
         {
+            GenerateLines();
             Debug.Log("Playing game");
             // TODO Dibujar elementos
             LogicCtrl.Instance.PlayLevel(0);
@@ -60,6 +63,18 @@ namespace JumpingJack.Managers
         private void Tic()
         {
             LogicCtrl.Instance.Tic();
+        }
+
+        private Transform[] lines = new Transform[8];
+        private void GenerateLines()
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                lines[i] = Instantiate(linesPrefab).transform;
+                lines[i].localScale = new Vector3(  GameScreenCoords.Units * 16f,
+                                                    GameScreenCoords.Units * 1,1);
+                lines[i].position = GameScreenCoords.CellToWorld(0, (i * 3) + 3);
+            }
         }
 
         private void OnDestroy()

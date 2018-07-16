@@ -106,6 +106,8 @@ namespace JumpingJack.Controllers
             hole.cellPos = cellPos;
             hole.moveDirection = direction;
             hole.primarySprite = Instantiate(holeMaskPrefab).transform;
+            hole.SetScale(new Vector3(GameScreenCoords.Units,
+                                        GameScreenCoords.Units, 1));
             
             return hole;
         }
@@ -145,19 +147,18 @@ namespace JumpingJack.Controllers
 
     public class Hole
     {
-        public bool enabled = false;
         public int moveDirection = 0;
-
+        
         public Transform primarySprite;
         public GameObject secondarySprite;
 
         public Vector2 cellPos = new Vector2();
 
-        public Hole(Vector2 cellPosition, int direction, bool enable)
+        public Hole(Vector2 cellPosition, int direction)
         {
-            enabled = enable;
             moveDirection = direction;
             cellPos = cellPosition;
+
         }
         public Hole(){}
 
@@ -202,5 +203,9 @@ namespace JumpingJack.Controllers
 
         }
 
-    }
+        public void SetScale(Vector3 scale){
+            primarySprite.localScale = scale;
+        }
+
+    } // Hole
 } // namespace

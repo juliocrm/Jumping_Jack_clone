@@ -173,13 +173,20 @@ namespace JumpingJack.Controllers
         public void ResetAvatar()
         {
             cellPosition = _InitialPosition;
-
+            SetSize();
             _transform.position = GameScreenCoords.CellToWorld(14,0);
         }
 
         public void SetInitialPos(Vector2 position)
         {
             _InitialPosition = position;
+        }
+
+        private void SetSize()
+        {
+            Debug.Log("Units" + GameScreenCoords.Units);
+            transform.localScale = new Vector3(GameScreenCoords.Units,
+                                                GameScreenCoords.Units,1);
         }
 
 
