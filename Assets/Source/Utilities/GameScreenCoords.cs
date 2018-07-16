@@ -14,9 +14,16 @@ namespace JumpingJack.Utilities
         [Tooltip("Porcentaje (en decimales) del borde superior que dejaremos para el juego.")]
         [SerializeField] float upper = 0.1f;
         
-        private static float units;
+        public static float Units { get; private set; }
         private static Vector3 origin = Vector3.zero;
         private static Vector3 tempV3 = Vector3.zero;
+
+        public static bool UnitsReady { get; private set; }
+
+        private void Awake()
+        {
+            UnitsReady = false;
+        }
 
         // Use this for initialization
         void Start()
@@ -28,24 +35,26 @@ namespace JumpingJack.Utilities
         {
             Vector2 screenSize = GetComponent<RectTransform>().sizeDelta;
 
-            units = screenSize.y * (1 - upper * 2) / 24;
-            units *= transform.localScale.x;
+            Units = screenSize.y * (1 - upper * 2) / 24;
+            Units *= transform.localScale.x;
 
-            origin.x = -16 * units;
-            origin.y = -12 * units;
+            origin.x = -16 * Units;
+            origin.y = -12 * Units;
+
+            UnitsReady = true;
         }
 
         public static Vector3 CellToWorld(int x, int y)
         {
-            tempV3.x = origin.x + x * units;
-            tempV3.y = origin.y + y * units;
+            tempV3.x = origin.x + x * Units;
+            tempV3.y = origin.y + y * Units;
             return tempV3;
         }
 
         public static Vector3 CellToWorld(Vector2 cell)
         {
-            tempV3.x = origin.x + cell.x * units;
-            tempV3.y = origin.y + cell.y * units;
+            tempV3.x = origin.x + cell.x * Units;
+            tempV3.y = origin.y + cell.y * Units;
             return tempV3;
         }
 

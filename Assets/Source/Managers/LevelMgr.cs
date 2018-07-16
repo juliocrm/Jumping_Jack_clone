@@ -42,7 +42,10 @@ namespace JumpingJack.Managers
         public void Init()
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
+            HolesCtrl.Instance.Init();
+
             GameMgr_JJ.OnTic += Tic;
+
         }
 
         public void PlayNewGame()

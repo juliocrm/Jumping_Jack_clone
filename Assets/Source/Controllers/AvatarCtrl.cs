@@ -188,7 +188,6 @@ namespace JumpingJack.Controllers
     public class AvatarStateBase
     {
         virtual public void Tic(int frame) {
-            Debug.Log("Aquí no debe llegar");
         }
     }
 

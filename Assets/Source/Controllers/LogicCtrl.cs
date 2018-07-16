@@ -64,9 +64,11 @@ namespace JumpingJack.Controllers
             tick++;
             //if (AvatarCtrl.Instance.actualState == AvatarCtrl.States.Standing)
             //    ApplyInput();
-                        
-            AvatarCtrl.Instance.Tic(tick);
+            
 
+            HolesCtrl.Instance.Tic(tick);
+
+            AvatarCtrl.Instance.Tic(tick);
             if (tick == 4)
             {
                 if (logicState == State.FinishingLevel)
@@ -89,7 +91,6 @@ namespace JumpingJack.Controllers
                     GameOver();
                 return;
             }
-
             if (TestEnemyContact())
                 AvatarCtrl.Instance.Kicked();
             else
@@ -113,9 +114,12 @@ namespace JumpingJack.Controllers
 
         public int TestJump()
         {
+            if (!HolesCtrl.Instance.ExistHoleIn(AvatarCtrl.Instance.cellPosition))
+                return 0;
+            
             if (AvatarCtrl.Instance.cellPosition.y + 3 == 24)
                 return 2; // Última línea
-            // return 0; // Incorrecto
+                        
             return 1; // Salta a siguiente
         }
 
@@ -135,15 +139,17 @@ namespace JumpingJack.Controllers
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
-                else if(TestJump() == 1)
+                else if (TestJump() == 1)
+                {
+                    HolesCtrl.Instance.AddHole();
                     AvatarCtrl.Instance.Jump();
-
+                }
                 else if (TestJump() == 2)
                 {
                     // Avatar Last Jump Anim
+                    HolesCtrl.Instance.AddHole();
                     logicState = State.FinishingLevel;
                 }
-
             }
         }
 
