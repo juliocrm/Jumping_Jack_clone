@@ -50,6 +50,9 @@ namespace JumpingJack.Controllers
 
         public void Init(int enemies)
         {
+            if (enemies == 0)
+                return;
+
             List<GameObject> goEnemies = GetRandomEnemies(enemies);
 
             for (int i = 0; i < enemies; i ++)
@@ -75,9 +78,36 @@ namespace JumpingJack.Controllers
             return outEnemies;
         }
 
+        public bool TestEnemyIn(Vector2 cell)
+        {
+            if (enemiesList.Count == 0)
+                return false;
+            else
+            {
+                for(int i = 0; i < enemiesList.Count; i++)
+                {
+                    if (enemiesList[i].cellPos.y == cell.y)
+                        if(cell.x - 2 < enemiesList[i].cellPos.x && enemiesList[i].cellPos.x < cell.x + 2)
+                        return true;
+                }
+                return false;
+            }
+        }
+
         public void ResetController()
         {
-            
+            if (enemiesList.Count > 0)
+                DestroyEnemies();
+        }
+
+        private void DestroyEnemies()
+        {
+            for(int i = enemiesList.Count; i > 0; i--)
+            {
+                Transform transf = enemiesList[i].primarySprite;
+                DestroyImmediate(transf);
+                enemiesList.RemoveAt(i);
+            }
         }
 
     } // EnemiesCtrk

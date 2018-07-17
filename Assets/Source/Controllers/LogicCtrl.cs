@@ -124,7 +124,7 @@ namespace JumpingJack.Controllers
 
         public bool TestEnemyContact()
         {
-            return false;
+            return EnemiesCtrl.Instance.TestEnemyIn(AvatarCtrl.Instance.cellPosition);                
         }
 
         public int TestJump()

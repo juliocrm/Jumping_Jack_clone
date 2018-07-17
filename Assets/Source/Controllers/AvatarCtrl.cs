@@ -146,9 +146,6 @@ namespace JumpingJack.Controllers
 
         public void Falling()
         {
-            if (actualState == States.KnockOut)
-                return;
-
             avatarState = fallingState;
             actualState = States.Falling;
         }
