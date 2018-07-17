@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 using JumpingJack.Controllers;
 using JumpingJack.Utilities;
@@ -48,7 +48,7 @@ namespace JumpingJack.Managers
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
             HolesCtrl.Instance.Init();
-            EnemiesCtrl.Instance.Init(1);
+            //EnemiesCtrl.Instance.Init(9);
 
             GameMgr_JJ.OnTic += Tic;
 
@@ -68,7 +68,7 @@ namespace JumpingJack.Managers
 
             // TODO Dibujar elementos
             ActualLevel = 1;
-            LogicCtrl.Instance.PlayLevel(0);
+            LogicCtrl.Instance.PlayLevel();
             
             AvatarCtrl.Instance.ResetAvatar();
         }
@@ -81,6 +81,7 @@ namespace JumpingJack.Managers
 
         public void LevelCompleted()
         {
+            GameMgr_JJ.Instance.StopTics();
             StartCoroutine(LevelCompletedCoroutine());
         }
 
@@ -101,7 +102,10 @@ namespace JumpingJack.Managers
         {
             ActualLevel++;
             EnemiesCtrl.Instance.Init(ActualLevel - 1);
+            LogicCtrl.Instance.ResetGame();
+            AvatarCtrl.Instance.ResetAvatar();
 
+            LogicCtrl.Instance.PlayLevel();
         }
 
         private void Tic()

@@ -1422,6 +1422,7 @@ GameObject:
   - component: {fileID: 417822307}
   - component: {fileID: 417822306}
   - component: {fileID: 417822311}
+  - component: {fileID: 417822312}
   m_Layer: 0
   m_Name: MANAGERS
   m_TagString: Untagged
@@ -1500,6 +1501,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e6bee27b3da994ea6231c04a3f5cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &417822312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 417822305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c80f499894f7142a9dc3a080194fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyContact: 1
+  falling: 0
+  alwaysJumping: 1
 --- !u!1 &441091791
 GameObject:
   m_ObjectHideFlags: 0

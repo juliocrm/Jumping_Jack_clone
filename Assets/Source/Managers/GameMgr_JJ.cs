@@ -118,6 +118,8 @@ namespace JumpingJack.Managers
         {
             ticCoroutine = StartCoroutine(TIC_Coroutine());
         }
+        
+
 
         public void ResetGame()
         {

@@ -48,15 +48,10 @@ namespace JumpingJack.Controllers
         {
 
         }
-
-        // Update is called once per frame
-        void Update()
+        
+        public void PlayLevel()
         {
-
-        }
-
-        public void PlayLevel(int level)
-        {
+            logicState = State.Playing;
             GameMgr_JJ.Instance.PlayTics();
         }
 
@@ -111,6 +106,9 @@ namespace JumpingJack.Controllers
 
         public int TestFallingInHoles()
         {
+            if (!CheatsMgr.FallingEnable())
+                return 0;
+
             if (HolesCtrl.Instance.ExistHoleDown(AvatarCtrl.Instance.cellPosition))
             {
                 if (AvatarCtrl.Instance.cellPosition.y - 3 == 0)
@@ -126,17 +124,23 @@ namespace JumpingJack.Controllers
 
         public bool TestEnemyContact()
         {
+            if (!CheatsMgr.EnemyContactEnabled())
+                return false;
+
             return EnemiesCtrl.Instance.TestEnemyIn(AvatarCtrl.Instance.cellPosition);                
         }
 
         public int TestJump()
         {
-            if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
-                return 0;
-            
             if (AvatarCtrl.Instance.cellPosition.y + 3 == 24)
                 return 2; // Última línea
-                        
+
+            if (CheatsMgr.AlwaysJumpOK())
+                return 1;
+
+            if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
+                return 0;
+                                    
             return 1; // Salta a siguiente
         }
 
@@ -153,7 +157,6 @@ namespace JumpingJack.Controllers
             }
             if (InputMgr.JumpPressed)
             {
-                GameOver();
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
@@ -189,8 +192,9 @@ namespace JumpingJack.Controllers
             }
 
             logicState = State.ScoreScreen;
-            // Lanzar pantalla de Puntuación
+
             LevelMgr.Instance.LevelCompleted();
+
             actualLevel++;
         }
 

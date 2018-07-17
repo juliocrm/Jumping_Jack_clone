@@ -58,6 +58,7 @@ namespace JumpingJack.Controllers
             for (int i = 0; i < enemies; i ++)
             {
                 Enemy enemy = new Enemy(Instantiate(goEnemies[i]).transform);
+                enemy.cellPos = GetRandomCell();
                 enemiesList.Add(enemy);
                 enemiesList[i].SetScale(new Vector3(GameScreenCoords.Units,
                                                     GameScreenCoords.Units,1));
@@ -75,7 +76,29 @@ namespace JumpingJack.Controllers
                 outEnemies.Add(tempEnemies[index]);
                 tempEnemies.RemoveAt(index);
             }
+            
             return outEnemies;
+        }
+
+        private Vector2 GetRandomCell()
+        {
+            Vector2 cellPos = Vector2.zero;
+            bool dif = false;
+            while (!dif)
+            {
+                cellPos = new Vector2(Random.Range(1, 10) * 3,
+                    Random.Range(1, 7) * 3);
+                dif = true;
+                if (enemiesList.Count != 0)
+                    for (int i = 0; i < enemiesList.Count; i++)
+                    {
+                        if (cellPos.x - 3 < enemiesList[i].cellPos.x &&
+                            enemiesList[i].cellPos.x < cellPos.x + 3)
+                            
+                                dif = false;
+                    }
+            }
+            return cellPos;
         }
 
         public bool TestEnemyIn(Vector2 cell)
