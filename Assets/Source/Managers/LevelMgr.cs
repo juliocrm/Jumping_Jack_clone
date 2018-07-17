@@ -60,12 +60,14 @@ namespace JumpingJack.Managers
 
             GenerateLines();
             Debug.Log("Playing game");
-            LifePointsCtrl.Instance.ResetData();
-            LifePointsCtrl.Instance.SetLives(6);
+            //LifePointsCtrl.Instance.SetLives(6);
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
-            HolesCtrl.Instance.AddHoles(2);
+
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12,21),1);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
+
 
             // TODO Dibujar elementos
             ActualLevel = 1;
@@ -78,18 +80,22 @@ namespace JumpingJack.Managers
         {
             GameOverUI.Instance.StartScreen(LifePointsCtrl.Instance.Score,
                 ActualLevel - 1, LifePointsCtrl.Instance.newHigScore);
+            GameMgr_JJ.Instance.StopTics();
+            HolesCtrl.Instance.DestroyHoles();
         }
 
         public void LevelCompleted()
         {
             GameMgr_JJ.Instance.StopTics();
             HolesCtrl.Instance.DestroyHoles();
+            EnemiesCtrl.Instance.DestroyEnemies();
+
             StartCoroutine(LevelCompletedCoroutine());
         }
 
         private IEnumerator LevelCompletedCoroutine()
         {
-            EnemiesCtrl.Instance.ResetController();
+            EnemiesCtrl.Instance.DestroyEnemies();
 
             EndLevelUI.Instance.EnableScreen();
             EndLevelUI.Instance.StartScreen(ActualLevel, ActualLevel-1);
@@ -103,7 +109,8 @@ namespace JumpingJack.Managers
         private void PlayNextLevel()
         {
             ActualLevel++;
-            HolesCtrl.Instance.AddHoles(2);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), 1);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
             EnemiesCtrl.Instance.Init(ActualLevel - 1);
             LogicCtrl.Instance.ResetGame();
             AvatarCtrl.Instance.ResetAvatar();

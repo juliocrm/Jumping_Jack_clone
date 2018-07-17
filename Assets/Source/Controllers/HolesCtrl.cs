@@ -54,16 +54,6 @@ namespace JumpingJack.Controllers
 
         public void Init()
         {
-            /*
-            holesList.Add(GetRandomHole());
-            holesList[0].moveDirection = 1;
-            holesList[0].cellPos = new Vector2(12,21);
-
-
-            holesList.Add(GetRandomHole());
-            holesList[1].moveDirection = -1;
-            holesList[1].cellPos = new Vector2(12,21);
-            */
         }
 
         public void Tic(int frame)
@@ -81,6 +71,14 @@ namespace JumpingJack.Controllers
                 if (holesList.Count < 8)
                     holesList.Add(GetRandomHole());
             }
+        }
+
+        public void AddHoleIn(Vector2 cell, int direction)
+        {
+            Hole hole = GetRandomHole();
+            hole.cellPos = cell;
+            hole.moveDirection = direction;
+            holesList.Add(hole);
         }
 
         public void DestroyHoles()

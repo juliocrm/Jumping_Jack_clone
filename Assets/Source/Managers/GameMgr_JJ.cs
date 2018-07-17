@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using JumpingJack.UI;
+using JumpingJack.Controllers;
 
 namespace JumpingJack.Managers
 {
     public class GameMgr_JJ : MonoBehaviour {
         
+        [SerializeField] private float _tic = 0.087f;
+        [SerializeField] private int lifes = 6;
+
         private enum States {   Starting,
                                 Playing,
                                 Paused,}
         private States state = States.Starting;
 
-        [SerializeField] private float _tic = 0.087f;
         private float actualTic;
 
         private bool init = false;
@@ -61,7 +64,7 @@ namespace JumpingJack.Managers
 
             LoadingUI.Instance.Stop();
 
-            PlayGame();
+            PlayNewGame();
         }
 
         // Update is called once per frame
@@ -98,15 +101,20 @@ namespace JumpingJack.Managers
             actualTic = _tic * multiplier;
         }
 
-        public void PlayGame()
+        public void PlayNewGame()
         {
+            LifePointsCtrl.Instance.ResetData();
+            LifePointsCtrl.Instance.SetLives(lifes);
             LevelMgr.Instance.PlayNewGame();
             state = States.Playing;
         }
 
-        public void PauseGame()
+        public void PauseGame(bool pause)
         {
-            state = States.Paused;
+            if (pause)
+                state = States.Paused;
+            else
+                state = States.Playing;
         }
 
         public void StopTics()

@@ -1477,6 +1477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tic: 0.0166
+  lifes: 6
 --- !u!4 &417822310
 Transform:
   m_ObjectHideFlags: 0

@@ -117,20 +117,17 @@ namespace JumpingJack.Controllers
             }
         }
 
-        public void ResetController()
+        public void DestroyEnemies()
         {
             if (enemiesList.Count > 0)
-                DestroyEnemies();
-        }
-
-        private void DestroyEnemies()
-        {
-            int count = enemiesList.Count;
-            for (int i = 0; i < count; i++)
             {
-                Transform transf = enemiesList[0].primarySprite;
-                enemiesList.RemoveAt(0);
-                Destroy(transf.gameObject);
+                int count = enemiesList.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    Transform transf = enemiesList[0].primarySprite;
+                    enemiesList.RemoveAt(0);
+                    Destroy(transf.gameObject);
+                }
             }
         }
 
