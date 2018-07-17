@@ -1513,8 +1513,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyContact: 1
-  falling: 0
-  alwaysJumping: 1
+  falling: 1
+  alwaysJumping: 0
 --- !u!1 &441091791
 GameObject:
   m_ObjectHideFlags: 0

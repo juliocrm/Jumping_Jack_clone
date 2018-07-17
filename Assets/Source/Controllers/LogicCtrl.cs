@@ -166,7 +166,7 @@ namespace JumpingJack.Controllers
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
 
                     skipFallingTest += 16;
-                    HolesCtrl.Instance.AddHole();
+                    HolesCtrl.Instance.AddHoles(1);
                     AvatarCtrl.Instance.Jump();
                 }
                 else if (TestJump() == 2)
@@ -174,7 +174,7 @@ namespace JumpingJack.Controllers
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
                     skipFallingTest += 16;
-                    HolesCtrl.Instance.AddHole();
+                    HolesCtrl.Instance.AddHoles(1);
                     logicState = State.FinishingLevel;
                 }
             }

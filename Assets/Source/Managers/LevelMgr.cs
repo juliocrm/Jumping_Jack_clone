@@ -65,6 +65,7 @@ namespace JumpingJack.Managers
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
+            HolesCtrl.Instance.AddHoles(2);
 
             // TODO Dibujar elementos
             ActualLevel = 1;
@@ -82,6 +83,7 @@ namespace JumpingJack.Managers
         public void LevelCompleted()
         {
             GameMgr_JJ.Instance.StopTics();
+            HolesCtrl.Instance.DestroyHoles();
             StartCoroutine(LevelCompletedCoroutine());
         }
 
@@ -101,6 +103,7 @@ namespace JumpingJack.Managers
         private void PlayNextLevel()
         {
             ActualLevel++;
+            HolesCtrl.Instance.AddHoles(2);
             EnemiesCtrl.Instance.Init(ActualLevel - 1);
             LogicCtrl.Instance.ResetGame();
             AvatarCtrl.Instance.ResetAvatar();

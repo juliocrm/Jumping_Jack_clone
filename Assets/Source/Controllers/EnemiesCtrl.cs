@@ -125,10 +125,11 @@ namespace JumpingJack.Controllers
 
         private void DestroyEnemies()
         {
-            for(int i = 0; i < enemiesList.Count; i++)
+            int count = enemiesList.Count;
+            for (int i = 0; i < count; i++)
             {
-                Transform transf = enemiesList[i].primarySprite;
-                enemiesList.RemoveAt(i);
+                Transform transf = enemiesList[0].primarySprite;
+                enemiesList.RemoveAt(0);
                 Destroy(transf.gameObject);
             }
         }
