@@ -690,6 +690,8 @@ MonoBehaviour:
   enemiesText: {fileID: 2068700320}
   newHiScoreGO: {fileID: 984217868}
   replayTextGO: {fileID: 1599693829}
+  gameTitleParent: {fileID: 1259182852}
+  pointsParent: {fileID: 290360161}
   parentGO: {fileID: 710764892}
 --- !u!114 &197436004
 MonoBehaviour:
@@ -1724,7 +1726,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &710764893
 MonoBehaviour:
   m_ObjectHideFlags: 0
