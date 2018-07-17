@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using JumpingJack.Controllers;
 using JumpingJack.Utilities;
+using JumpingJack.UI;
 
 namespace JumpingJack.Managers
 {
     public class LevelMgr : MonoBehaviour
     {
         [SerializeField] private GameObject linesPrefab;
+
+        public int ActualLevel { get; set; }
 
         #region Singleton
         public static LevelMgr Instance { get; private set; }
@@ -55,7 +58,14 @@ namespace JumpingJack.Managers
         {
             GenerateLines();
             Debug.Log("Playing game");
+            LifePointsCtrl.Instance.ResetData();
+            LifePointsCtrl.Instance.SetLives(6);
+            InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
+            InGameUI.Instance.SetScore(0);
+            InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
+
             // TODO Dibujar elementos
+            ActualLevel = 1;
             LogicCtrl.Instance.PlayLevel(0);
             
             AvatarCtrl.Instance.ResetAvatar();

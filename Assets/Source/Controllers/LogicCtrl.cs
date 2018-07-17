@@ -87,9 +87,10 @@ namespace JumpingJack.Controllers
                 AvatarCtrl.Instance.Falling();
             }
             else if (TestFallingInHoles() == 2) {
+                LifePointsCtrl.Instance.LoseLife();
                 AvatarCtrl.Instance.Falling();
-                avatarLives--;
-                if (avatarLives == 0)
+                
+                if (LifePointsCtrl.Instance.Lifes == 0)
                     GameOver();
                 return;
             }
@@ -110,16 +111,17 @@ namespace JumpingJack.Controllers
 
         public int TestFallingInHoles()
         {
-            if(HolesCtrl.Instance.ExistHoleDown(AvatarCtrl.Instance.cellPosition))
-                return 1; // cayendo
-
+            if (HolesCtrl.Instance.ExistHoleDown(AvatarCtrl.Instance.cellPosition))
+            {
+                if (AvatarCtrl.Instance.cellPosition.y - 3 == 0)
+                {
+                    return 2; // Cae y pierde vida
+                }
+                else
+                    return 1; // cayendo
+            }
             else
                 return 0; // No cae
-            
-            //if (AvatarCtrl.Instance.cellPosition.y - 3 == 0)
-            //    return 2; // Cayendo en última línea
-            
-
         }
 
         public bool TestEnemyContact()
@@ -157,12 +159,15 @@ namespace JumpingJack.Controllers
 
                 else if (TestJump() == 1)
                 {
+                    LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
+
                     skipFallingTest += 8;
                     HolesCtrl.Instance.AddHole();
                     AvatarCtrl.Instance.Jump();
                 }
                 else if (TestJump() == 2)
                 {
+                    LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
                     skipFallingTest += 8;
                     HolesCtrl.Instance.AddHole();

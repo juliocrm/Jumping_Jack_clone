@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace JumpingJack.Managers
 {
@@ -40,17 +42,30 @@ namespace JumpingJack.Managers
             LoadGame();
         }
         
-        public Game LoadGame()
+        public static void LoadGame()
         {
-            Game game = new Game();
-            // TODO Cargar de disco...
-            Loaded = true;
-            return game;
+            if (File.Exists(Application.persistentDataPath + "/Gamedt.dat"))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(Application.persistentDataPath + "/Gamedt.dat", FileMode.Open);
+                Game game = bf.Deserialize(file) as Game;
+                file.Close();
+
+                MaxScore = game.maxScore;
+            }
+            Instance.Loaded = true;
         } 
 
-        public void SaveGame(Game game)
+        public static void SaveGame(int maxScore)
         {
+            MaxScore = maxScore;
 
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(Application.persistentDataPath + "/Gamedt.dat");
+
+            Game game = new Game(maxScore);
+            bf.Serialize(file, game);
+            file.Close();
         }
 
     } // Class
@@ -58,6 +73,10 @@ namespace JumpingJack.Managers
     [System.Serializable]
     public class Game
     {
-        int maxScore;
+        public int maxScore;
+        public Game(int _maxScore)
+        {
+            maxScore = _maxScore;
+        }
     }
 } // namespace

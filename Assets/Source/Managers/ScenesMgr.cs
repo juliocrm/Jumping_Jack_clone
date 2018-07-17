@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ScenesMgr : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -13,4 +14,6 @@ public class ScenesMgr : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    
 }
