@@ -153,6 +153,7 @@ namespace JumpingJack.Controllers
             }
             if (InputMgr.JumpPressed)
             {
+                GameOver();
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
@@ -180,23 +181,26 @@ namespace JumpingJack.Controllers
         {
             GameMgr_JJ.Instance.StopTics();
 
-            if (actualLevel == 19)
+            if (actualLevel == 21)
             {
                 logicState = State.GameOver;
-                // Lanzar pantalla de GameOver
+                // Lanzar pantalla de Final Juego
                 return;
             }
 
             logicState = State.ScoreScreen;
             // Lanzar pantalla de Puntuación
             LevelMgr.Instance.LevelCompleted();
-            Debug.Log("Level complete");
             actualLevel++;
         }
 
         public void GameOver()
         {
-
+            GameMgr_JJ.Instance.StopTics();
+            
+            logicState = State.GameOver;
+            
+            LevelMgr.Instance.GameOver();
         }
         
         public void ResetGame()

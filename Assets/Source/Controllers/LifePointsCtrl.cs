@@ -12,6 +12,7 @@ namespace JumpingJack.Controllers
         public int Lifes { get; private set; }
         public int Score { get; private set; }
         public int MaxScore { get; private set; }
+        public bool newHigScore { get; private set; }
 
         #region Singleton
         public static LifePointsCtrl Instance { get; private set; }
@@ -47,6 +48,7 @@ namespace JumpingJack.Controllers
         public void ResetData()
         {
             // Read MAX SCORE
+            newHigScore = false;
             MaxScore = 0;
             Score = 0;
             Lifes = 0;
@@ -63,6 +65,7 @@ namespace JumpingJack.Controllers
             InGameUI.Instance.SetScore(Score);
             if (Score > PersistenceMgr.MaxScore)
             {
+                newHigScore = true;
                 PersistenceMgr.SaveGame(Score);
                 InGameUI.Instance.SetMaxScore(Score);
             }
