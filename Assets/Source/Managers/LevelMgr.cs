@@ -56,6 +56,8 @@ namespace JumpingJack.Managers
 
         public void PlayNewGame()
         {
+            GameOverUI.Instance.CloseScreen();
+
             GenerateLines();
             Debug.Log("Playing game");
             LifePointsCtrl.Instance.ResetData();
@@ -69,6 +71,37 @@ namespace JumpingJack.Managers
             LogicCtrl.Instance.PlayLevel(0);
             
             AvatarCtrl.Instance.ResetAvatar();
+        }
+
+        public void GameOver()
+        {
+            GameOverUI.Instance.StartScreen(LifePointsCtrl.Instance.Score,
+                ActualLevel - 1, LifePointsCtrl.Instance.newHigScore);
+        }
+
+        public void LevelCompleted()
+        {
+            StartCoroutine(LevelCompletedCoroutine());
+        }
+
+        private IEnumerator LevelCompletedCoroutine()
+        {
+            EnemiesCtrl.Instance.ResetController();
+
+            EndLevelUI.Instance.EnableScreen();
+            EndLevelUI.Instance.StartScreen(ActualLevel, ActualLevel-1);
+
+            yield return new WaitForSeconds(13);
+            EndLevelUI.Instance.DisableScreen();
+
+            PlayNextLevel();
+        }
+
+        private void PlayNextLevel()
+        {
+            ActualLevel++;
+            EnemiesCtrl.Instance.Init(ActualLevel - 1);
+
         }
 
         private void Tic()
