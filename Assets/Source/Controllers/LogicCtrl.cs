@@ -68,6 +68,7 @@ namespace JumpingJack.Controllers
             
 
             HolesCtrl.Instance.Tic(tick);
+            EnemiesCtrl.Instance.Tic(tick);
 
             AvatarCtrl.Instance.Tic(tick);
             if (tick == 4)
@@ -123,7 +124,7 @@ namespace JumpingJack.Controllers
 
         public bool TestEnemyContact()
         {
-            return false;
+            return EnemiesCtrl.Instance.TestEnemyIn(AvatarCtrl.Instance.cellPosition);                
         }
 
         public int TestJump()
