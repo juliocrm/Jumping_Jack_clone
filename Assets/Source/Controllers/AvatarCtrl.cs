@@ -252,7 +252,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                GameMgr_JJ.Instance.MultiplyGameSpeed(2);
+                GameMgr_JJ.Instance.MultiplyTickDelay(20f);
             }
             if (frame == 4)
             {
@@ -263,7 +263,7 @@ namespace JumpingJack.Controllers
                 }
                 else
                 {
-                    GameMgr_JJ.Instance.MultiplyGameSpeed(1f);
+                    GameMgr_JJ.Instance.MultiplyTickDelay(1f);
 
                     AvatarCtrl.Instance.cellPosition.y += 3;
 

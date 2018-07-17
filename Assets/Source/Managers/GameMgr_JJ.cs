@@ -46,12 +46,17 @@ namespace JumpingJack.Managers
             yield return new WaitForSeconds(0.1f);
 
             actualTic = _tic;
+#if UNITY_EDITOR
+            var localInit = StartCoroutine(Init());
+#else
+            var localInit = StartCoroutine(Init());
 
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
             
             var localInit = StartCoroutine(Init());
             
             yield return loadingCoroutine;
+#endif
             yield return localInit;
 
             LoadingUI.Instance.Stop();
@@ -88,7 +93,7 @@ namespace JumpingJack.Managers
             }
         }
 
-        public void MultiplyGameSpeed(float multiplier)
+        public void MultiplyTickDelay(float multiplier)
         {
             actualTic = _tic * multiplier;
         }

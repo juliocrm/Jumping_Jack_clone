@@ -71,6 +71,31 @@ namespace JumpingJack.Managers
             AvatarCtrl.Instance.ResetAvatar();
         }
 
+        public void LevelCompleted()
+        {
+            StartCoroutine(LevelCompletedCoroutine());
+        }
+
+        private IEnumerator LevelCompletedCoroutine()
+        {
+            EnemiesCtrl.Instance.ResetController();
+
+            EndLevelUI.Instance.EnableScreen();
+            EndLevelUI.Instance.StartScreen(ActualLevel, ActualLevel-1);
+
+            yield return new WaitForSeconds(13);
+            EndLevelUI.Instance.DisableScreen();
+
+            PlayNextLevel();
+        }
+
+        private void PlayNextLevel()
+        {
+            ActualLevel++;
+            EnemiesCtrl.Instance.Init(ActualLevel - 1);
+
+        }
+
         private void Tic()
         {
             LogicCtrl.Instance.Tic();

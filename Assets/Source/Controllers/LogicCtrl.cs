@@ -161,7 +161,7 @@ namespace JumpingJack.Controllers
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
 
-                    skipFallingTest += 8;
+                    skipFallingTest += 16;
                     HolesCtrl.Instance.AddHole();
                     AvatarCtrl.Instance.Jump();
                 }
@@ -169,7 +169,7 @@ namespace JumpingJack.Controllers
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
-                    skipFallingTest += 8;
+                    skipFallingTest += 16;
                     HolesCtrl.Instance.AddHole();
                     logicState = State.FinishingLevel;
                 }
@@ -189,7 +189,7 @@ namespace JumpingJack.Controllers
 
             logicState = State.ScoreScreen;
             // Lanzar pantalla de Puntuación
-            
+            LevelMgr.Instance.LevelCompleted();
             Debug.Log("Level complete");
             actualLevel++;
         }

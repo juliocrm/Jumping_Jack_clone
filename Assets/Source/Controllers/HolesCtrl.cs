@@ -121,14 +121,14 @@ namespace JumpingJack.Controllers
             } while (dir == 0);
             return dir;                    
         }
-
+        
         public bool ExistHoleUp(Vector2 avatarCell)
         {
             avatarCell.y += 3;
             for(int i = 0; i < holesList.Count; i++)
             {
-                if (holesList[i].cellPos.x == avatarCell.x ||
-                    holesList[i].cellPos.x == avatarCell.x + 1)
+                if (holesList[i].cellPos.x <= avatarCell.x &&
+                    holesList[i].cellPos.x <= avatarCell.x + 2)
                 {
                     if (holesList[i].cellPos.y == avatarCell.y)
                         return true;
@@ -139,8 +139,18 @@ namespace JumpingJack.Controllers
 
         public bool ExistHoleDown(Vector2 avatarCell)
         {
-            avatarCell.y -= 3;
-            return ExistHoleUp(avatarCell);
+            for (int i = 0; i < holesList.Count; i++)
+            {
+                if (holesList[i].cellPos.y == avatarCell.y)
+                {
+                    if (holesList[i].cellPos.x == avatarCell.x ||
+                    holesList[i].cellPos.x + 1 == avatarCell.x)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     } // Class
@@ -169,10 +179,10 @@ namespace JumpingJack.Controllers
 
         public void Tic(int frame)
         {
-            primarySprite.position = GameScreenCoords.CellToWorld(cellPos);
-
             if (frame == 4)
             {
+                primarySprite.position = GameScreenCoords.CellToWorld(cellPos);
+
                 if (moveDirection == 1)
                 {
                     if (cellPos.x == 30)
