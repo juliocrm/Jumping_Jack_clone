@@ -38,12 +38,29 @@ namespace JumpingJack.UI
 
         public void SetScore(int score)
         {
-            scoreText.text = score.ToString();
+            string s = "";
+            FillString(ref s, 10000, score);
+            s += score.ToString();
+            scoreText.text = s;
         }
 
         public void SetMaxScore(int score)
         {
-            maxScoreText.text = score.ToString();
+            string s = "";
+            FillString(ref s, 10000, score);
+            s += score.ToString();
+
+            maxScoreText.text = s;
+        }
+
+        private void FillString(ref string s, int max, int value)
+        {
+            if(max > 1)
+            if (value < max)
+            {
+                s += "0";
+                FillString(ref s, max / 10, value);
+            }
         }
 
         public void SetLifes(int lives)

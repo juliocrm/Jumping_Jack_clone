@@ -27,7 +27,8 @@ namespace JumpingJack.Controllers
                                 Falling,
                                 Kicked,
                                 BadJump,
-                                KnockOut}
+                                KnockOut,
+                                other}
 
         public States actualState = States.Standing;
 
@@ -80,12 +81,12 @@ namespace JumpingJack.Controllers
         public void Tic(int frame)
         {
             avatarState.Tic(frame);
-            if(actualKickedFrames != 0)
+            if(actualKickedFrames > 0)
             {
                 actualKickedFrames--;
-                if (actualKickedFrames == 0)
+                if (actualKickedFrames <= 0)
                 {
-                    actualState = States.Standing;
+                    Debug.Log("Kicked Finished");
                     Standing();
                 }
             }
@@ -95,9 +96,14 @@ namespace JumpingJack.Controllers
 
         public void RunLeft()
         {
+            if (actualState == States.RunningLeft)
+                return;
+
             if (actualState == States.RunningRight
                 || actualState == States.Standing)
             {
+                AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.Running);
+
                 avatarState = runningLeftState;
                 actualState = States.RunningLeft;
 
@@ -107,9 +113,14 @@ namespace JumpingJack.Controllers
 
         public void RunRight()
         {
+            if (actualState == States.RunningRight)
+                return;
+
             if (actualState == States.RunningLeft
                 || actualState == States.Standing)
             {
+                AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.Running);
+
                 avatarState = runningRightState;
                 actualState = States.RunningRight;
 
@@ -123,6 +134,8 @@ namespace JumpingJack.Controllers
                 || actualState == States.RunningLeft
                 || actualState == States.Standing)
             {
+                AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                
                 avatarState = jumpingState;
                 actualState = States.Jumping;
 
@@ -132,17 +145,24 @@ namespace JumpingJack.Controllers
 
         public void Standing()
         {
+            if (actualState == States.Standing)
+                return;
+
             if (actualState == States.Jumping)
                 return;
-            if (actualState == States.Kicked)
-                return;
+            //if (actualState == States.Kicked)
+            //    return;
             if (actualState == States.Falling)
                 return;
             if (actualState == States.BadJump)
                 return;
-            if (actualState == States.KnockOut)
+            //if (actualState == States.KnockOut)
+            //    return;
+            if (actualKickedFrames != 0)
                 return;
 
+            AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.Standing);
+            
             avatarState = standingState;
             actualState = States.Standing;
 
@@ -151,8 +171,8 @@ namespace JumpingJack.Controllers
 
         public void Kicked()
         {
-            if (actualState == States.KnockOut)
-                return;
+            //if (actualState == States.KnockOut)
+            //    return;
 
             avatarState = kickedState;
             actualState = States.Kicked;
@@ -162,6 +182,8 @@ namespace JumpingJack.Controllers
 
         public void Falling()
         {
+            AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.Falling);
+
             avatarState = fallingState;
             actualState = States.Falling;
 
@@ -173,6 +195,8 @@ namespace JumpingJack.Controllers
             if (actualState == States.KnockOut)
                 return;
 
+            AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.BadJump);
+            
             avatarState = badJumpState;
             actualState = States.BadJump;
 
@@ -181,15 +205,22 @@ namespace JumpingJack.Controllers
 
         public void KnockOut()
         {
+            AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.KnockOut);
+
+
             avatarState = knockOutState;
             actualState = States.KnockOut;
-
         }
 
         #endregion
 
         public void ResetAvatar()
         {
+            Instance.actualState = States.other;
+            Instance.Standing();
+
+            GameMgr_JJ.Instance.MultiplyTickDelay(1);
+
             cellPosition = _InitialPosition;
             SetSize();
             _transform.position = GameScreenCoords.CellToWorld(14,0);
@@ -247,6 +278,8 @@ namespace JumpingJack.Controllers
         Vector3 tempV3;
         public override void Tic(int frame)
         {
+
+
             AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
 
             tempV3 = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
@@ -302,7 +335,8 @@ namespace JumpingJack.Controllers
 
                     AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
 
-                    AvatarCtrl.Instance.actualState = AvatarCtrl.States.Standing;
+                    AvatarCtrl.Instance.actualState = AvatarCtrl.States.other;
+                    AvatarCtrl.Instance.Standing();
 
                 }
                 //else
@@ -394,7 +428,9 @@ namespace JumpingJack.Controllers
         public override void Tic(int frame)
         {
             if (frame == 1)
+            {
                 AvatarCtrl.Instance.primaryAnimator.SetInteger(AvatarCtrl.stateName, (int)AvatarCtrl.States.KnockOut);
+            }
 
             AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
         }

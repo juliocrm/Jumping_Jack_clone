@@ -81,7 +81,10 @@ namespace JumpingJack.Controllers
                 if (logicState == State.FinishingLevel)
                 {
                     if (finishLevelTics == 0)
+                    {
                         AvatarCtrl.Instance.Jump();
+                        AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.Win);
+                    }
 
                     finishLevelTics++;
                     if (finishLevelTics == 2)
@@ -110,16 +113,17 @@ namespace JumpingJack.Controllers
                 return;
             }
 
-            if (skipFallingTest == 0)
-            {
+            //if (skipFallingTest == 0)
+            //{
                 if (TestEnemyContact())
                 {
+                    Debug.Log("Enemy contact");
                     AvatarCtrl.Instance.Kicked();
                     return;
                 }
-            }
-            else
-                skipFallingTest--;
+            //}
+            //else
+            //    skipFallingTest--;
 
             ApplyInput();
         }
@@ -188,7 +192,7 @@ namespace JumpingJack.Controllers
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
 
-                    skipFallingTest += 16;
+                    //skipFallingTest += 16;
                     HolesCtrl.Instance.AddHoles(1);
                     AvatarCtrl.Instance.Jump();
                 }
@@ -196,7 +200,7 @@ namespace JumpingJack.Controllers
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
-                    skipFallingTest += 16;
+                    //skipFallingTest += 16;
                     HolesCtrl.Instance.AddHoles(1);
                     logicState = State.FinishingLevel;
                 }
@@ -218,8 +222,10 @@ namespace JumpingJack.Controllers
         private IEnumerator LevelCompleteCoroutine()
         {
             GameMgr_JJ.Instance.StopTics();
-            // TODO Play win music
+            
             yield return new WaitForSeconds(2);
+
+            
 
             if (actualLevel == 21)
             {
