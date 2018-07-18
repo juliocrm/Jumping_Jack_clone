@@ -1491,7 +1491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tic: 0.0166
-  lifes: 1
+  lifes: 6
 --- !u!4 &417822310
 Transform:
   m_ObjectHideFlags: 0
@@ -1529,7 +1529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyContact: 1
   falling: 1
-  alwaysJumping: 1
+  alwaysJumping: 0
 --- !u!82 &417822313
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3634,6 +3634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce6452ac881ba840b37ac00d403bb03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vidas: 0
 --- !u!1 &1473043381
 GameObject:
   m_ObjectHideFlags: 0
