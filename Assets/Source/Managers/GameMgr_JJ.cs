@@ -4,6 +4,7 @@ using UnityEngine;
 
 using JumpingJack.UI;
 using JumpingJack.Controllers;
+using JumpingJack.Utilities;
 
 namespace JumpingJack.Managers
 {
@@ -52,7 +53,6 @@ namespace JumpingJack.Managers
 #if UNITY_EDITOR
             var localInit = StartCoroutine(Init());
 #else
-            var localInit = StartCoroutine(Init());
 
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
             
@@ -61,8 +61,10 @@ namespace JumpingJack.Managers
             yield return loadingCoroutine;
 #endif
             yield return localInit;
-
+#if UNITY_EDITOR
+#else
             LoadingUI.Instance.Stop();
+#endif
 
             PlayNewGame();
         }
@@ -74,9 +76,10 @@ namespace JumpingJack.Managers
 
         private IEnumerator Init()
         {
+            yield return new WaitWhile(() => GameScreenCoords.UnitsReady == false);
             PersistenceMgr.Instance.Init();
-            yield return new WaitWhile(() => !PersistenceMgr.Instance.Loaded);
-
+            yield return new WaitWhile(() => PersistenceMgr.Instance.Loaded == false);
+            
             LevelMgr.Instance.Init();
             
             init = true;

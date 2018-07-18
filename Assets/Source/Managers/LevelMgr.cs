@@ -32,35 +32,25 @@ namespace JumpingJack.Managers
         }
         #endregion
 
-        // Use this for initialization
-        void Start()
-        {
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         public void Init()
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
-            HolesCtrl.Instance.Init();
-            //EnemiesCtrl.Instance.Init(9);
-
+            HolesCtrl.Instance.Init(); 
+            
             GameMgr_JJ.OnTic += Tic;
 
         }
 
         public void PlayNewGame()
         {
-            GameOverUI.Instance.CloseScreen();
+            EndLevelUI.Instance.DisableScreen();
 
+            //GameOverUI.Instance.CloseScreen();
             GenerateLines();
+            //EnemiesCtrl.Instance.Init(10);
             Debug.Log("Playing game");
-            //LifePointsCtrl.Instance.SetLives(6);
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
@@ -69,7 +59,6 @@ namespace JumpingJack.Managers
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
 
 
-            // TODO Dibujar elementos
             ActualLevel = 1;
             LogicCtrl.Instance.PlayLevel();
             
@@ -96,14 +85,16 @@ namespace JumpingJack.Managers
         private IEnumerator LevelCompletedCoroutine()
         {
             EnemiesCtrl.Instance.DestroyEnemies();
-
+            
             EndLevelUI.Instance.EnableScreen();
             EndLevelUI.Instance.StartScreen(ActualLevel, ActualLevel-1);
 
             yield return new WaitForSeconds(13);
-            EndLevelUI.Instance.DisableScreen();
-
-            PlayNextLevel();
+            if (ActualLevel != 21)
+            {
+                EndLevelUI.Instance.DisableScreen();
+                PlayNextLevel();
+            }
         }
 
         private void PlayNextLevel()
@@ -111,7 +102,7 @@ namespace JumpingJack.Managers
             ActualLevel++;
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), 1);
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
-            EnemiesCtrl.Instance.Init(ActualLevel - 1);
+            //EnemiesCtrl.Instance.Init(ActualLevel - 1); //************
             LogicCtrl.Instance.ResetGame();
             AvatarCtrl.Instance.ResetAvatar();
 

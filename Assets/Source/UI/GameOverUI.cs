@@ -86,6 +86,7 @@ namespace JumpingJack.UI
                 if (InputMgr.EnterPressed)
                 {
                     GameMgr_JJ.Instance.PlayNewGame();
+                    CloseScreen();
                     break;
                 }
             }
