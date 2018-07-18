@@ -64,9 +64,6 @@ namespace JumpingJack.Controllers
 
 
             ready = true;
-            Debug.Log("Ready");
-            //StartCoroutine(InstanceWithDelay(10));
-
         }
 
 
@@ -128,18 +125,6 @@ namespace JumpingJack.Controllers
                 return;
 
             GerRandomIndex(ref prefabsRandomIndex, enemies);
-            //prefabsRandomIndex.Add(0);
-            //prefabsRandomIndex.Add(1);
-            //prefabsRandomIndex.Add(2);
-            //prefabsRandomIndex.Add(3);
-            //prefabsRandomIndex.Add(4);
-            //prefabsRandomIndex.Add(5);
-            //prefabsRandomIndex.Add(6);
-            //prefabsRandomIndex.Add(7);
-            //prefabsRandomIndex.Add(8);
-            //prefabsRandomIndex.Add(9);
-            //prefabsRandomIndex.Add(1);
-            
             for (int i = 0; i < enemies; i ++)
             {
                 Enemy enemy = new Enemy();
@@ -150,8 +135,6 @@ namespace JumpingJack.Controllers
 
                 enemy.cellPos = GetRandomCell();
                 enemiesList.Add(enemy);
-                //enemiesList[i].SetScale(new Vector3(GameScreenCoords.Units,
-                                                    //GameScreenCoords.Units,1)
             }
         }
         
@@ -198,9 +181,7 @@ namespace JumpingJack.Controllers
                 outEnemies.Add(tempEnemies[index]);
                 tempEnemies.RemoveAt(index);
             }
-            /*
-            Debug.Log("enemies ready");
-            */
+            
             return outEnemies;
         }
 
@@ -259,7 +240,6 @@ namespace JumpingJack.Controllers
                     }
                 }
             }
-            Debug.Log("Random Finished");
             return cellPos;
         }
 

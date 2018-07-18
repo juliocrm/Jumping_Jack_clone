@@ -46,15 +46,9 @@ namespace JumpingJack.Managers
         public void PlayNewGame()
         {
             EndLevelUI.Instance.DisableScreen();
-
-            //GameOverUI.Instance.CloseScreen();
+            
             GenerateLines();
-            Debug.Log("Playing game52");
 
-            EnemiesCtrl.Instance.InstanceEnemies(20);
-            //EnemiesCtrl.Instance.printSomething();
-
-            Debug.Log("Playing game");
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
