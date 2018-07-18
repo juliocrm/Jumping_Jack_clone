@@ -10,7 +10,8 @@ namespace JumpingJack.Managers
         public static bool RightPressed { get; private set; }
         public static bool LeftPressed  { get; private set; }
         public static bool JumpPressed  { get; private set; }
-
+        public static bool EnterPressed { get; private set; }
+        private string enter = "enter";
 
         public static InputMgr Instance { get; private set; }
 
@@ -41,6 +42,7 @@ namespace JumpingJack.Managers
         // Update is called once per frame
         void Update()
         {
+            EnterPressed = Input.GetKeyDown(enter);
             RightPressed = Input.GetKey(KeyCode.RightArrow);
             LeftPressed = Input.GetKey(KeyCode.LeftArrow);
             JumpPressed = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space);

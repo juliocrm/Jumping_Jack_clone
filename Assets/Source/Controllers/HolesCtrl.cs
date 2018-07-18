@@ -54,15 +54,6 @@ namespace JumpingJack.Controllers
 
         public void Init()
         {
-            holesList.Add(GetRandomHole());
-            holesList[0].moveDirection = 1;
-            holesList[0].cellPos = new Vector2(12,21);
-
-
-            holesList.Add(GetRandomHole());
-            holesList[1].moveDirection = -1;
-            holesList[1].cellPos = new Vector2(12,21);
-
         }
 
         public void Tic(int frame)
@@ -73,10 +64,34 @@ namespace JumpingJack.Controllers
             }
         }
 
-        public void AddHole()
+        public void AddHoles(int count)
         {
-            if (holesList.Count < 8)
-                holesList.Add(GetRandomHole());
+            for (int i = 0; i < count; i++)
+            {
+                if (holesList.Count < 8)
+                    holesList.Add(GetRandomHole());
+            }
+        }
+
+        public void AddHoleIn(Vector2 cell, int direction)
+        {
+            Hole hole = GetRandomHole();
+            hole.cellPos = cell;
+            hole.moveDirection = direction;
+            holesList.Add(hole);
+        }
+
+        public void DestroyHoles()
+        {
+            if (holesList.Count > 0) {
+                int count = holesList.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    Transform transf = holesList[0].primarySprite;
+                    holesList.RemoveAt(0);
+                    Destroy(transf.gameObject);
+                }
+            }
         }
 
         private Hole GetRandomHole()
@@ -121,7 +136,8 @@ namespace JumpingJack.Controllers
             } while (dir == 0);
             return dir;                    
         }
-        
+
+        #region Test holes positions
         public bool ExistHoleUp(Vector2 avatarCell)
         {
             avatarCell.y += 3;
@@ -152,6 +168,7 @@ namespace JumpingJack.Controllers
             }
             return false;
         }
+        #endregion
 
     } // Class
 

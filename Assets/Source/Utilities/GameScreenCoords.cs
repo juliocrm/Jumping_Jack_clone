@@ -22,12 +22,13 @@ namespace JumpingJack.Utilities
 
         private void Awake()
         {
-            UnitsReady = false;
         }
 
         // Use this for initialization
         void Start()
         {
+            UnitsReady = false;
+
             DefineUnits();
         }
         

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 using JumpingJack.Controllers;
 using JumpingJack.Utilities;
@@ -32,43 +32,35 @@ namespace JumpingJack.Managers
         }
         #endregion
 
-        // Use this for initialization
-        void Start()
-        {
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         public void Init()
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
-            HolesCtrl.Instance.Init();
-            EnemiesCtrl.Instance.Init(1);
-
+            HolesCtrl.Instance.Init(); 
+            
             GameMgr_JJ.OnTic += Tic;
 
         }
 
         public void PlayNewGame()
         {
-            GameOverUI.Instance.CloseScreen();
+            EndLevelUI.Instance.DisableScreen();
 
+            //GameOverUI.Instance.CloseScreen();
             GenerateLines();
+            //EnemiesCtrl.Instance.Init(10);
             Debug.Log("Playing game");
-            LifePointsCtrl.Instance.ResetData();
-            LifePointsCtrl.Instance.SetLives(6);
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
 
-            // TODO Dibujar elementos
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12,21),1);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
+
+
             ActualLevel = 1;
-            LogicCtrl.Instance.PlayLevel(0);
+            LogicCtrl.Instance.PlayLevel();
             
             AvatarCtrl.Instance.ResetAvatar();
         }
@@ -77,31 +69,44 @@ namespace JumpingJack.Managers
         {
             GameOverUI.Instance.StartScreen(LifePointsCtrl.Instance.Score,
                 ActualLevel - 1, LifePointsCtrl.Instance.newHigScore);
+            GameMgr_JJ.Instance.StopTics();
+            HolesCtrl.Instance.DestroyHoles();
         }
 
         public void LevelCompleted()
         {
+            GameMgr_JJ.Instance.StopTics();
+            HolesCtrl.Instance.DestroyHoles();
+            EnemiesCtrl.Instance.DestroyEnemies();
+
             StartCoroutine(LevelCompletedCoroutine());
         }
 
         private IEnumerator LevelCompletedCoroutine()
         {
-            EnemiesCtrl.Instance.ResetController();
-
+            EnemiesCtrl.Instance.DestroyEnemies();
+            
             EndLevelUI.Instance.EnableScreen();
             EndLevelUI.Instance.StartScreen(ActualLevel, ActualLevel-1);
 
             yield return new WaitForSeconds(13);
-            EndLevelUI.Instance.DisableScreen();
-
-            PlayNextLevel();
+            if (ActualLevel != 21)
+            {
+                EndLevelUI.Instance.DisableScreen();
+                PlayNextLevel();
+            }
         }
 
         private void PlayNextLevel()
         {
             ActualLevel++;
-            EnemiesCtrl.Instance.Init(ActualLevel - 1);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), 1);
+            HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
+            //EnemiesCtrl.Instance.Init(ActualLevel - 1); //************
+            LogicCtrl.Instance.ResetGame();
+            AvatarCtrl.Instance.ResetAvatar();
 
+            LogicCtrl.Instance.PlayLevel();
         }
 
         private void Tic()

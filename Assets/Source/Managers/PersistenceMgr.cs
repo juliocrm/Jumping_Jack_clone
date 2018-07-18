@@ -48,6 +48,7 @@ namespace JumpingJack.Managers
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(Application.persistentDataPath + "/Gamedt.dat", FileMode.Open);
+
                 Game game = bf.Deserialize(file) as Game;
                 file.Close();
 

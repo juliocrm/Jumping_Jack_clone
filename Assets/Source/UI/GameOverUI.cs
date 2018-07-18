@@ -2,6 +2,7 @@
 //using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using JumpingJack.Managers;
 
 namespace JumpingJack.UI
 {
@@ -63,16 +64,32 @@ namespace JumpingJack.UI
             }
 
             replayTextGO.SetActive(true);
+            StartCoroutine(ReadEnterCoroutina());
         }
 
         public void CloseScreen()
         {
+
             gameTitleParent.SetActive(false);
             pointsParent.SetActive(false);
             newHiScoreGO.SetActive(false);
             replayTextGO.SetActive(false);
 
             parentGO.SetActive(false);
+        }
+
+        private IEnumerator ReadEnterCoroutina()
+        {
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
+                if (InputMgr.EnterPressed)
+                {
+                    GameMgr_JJ.Instance.PlayNewGame();
+                    CloseScreen();
+                    break;
+                }
+            }
         }
 
     } // Class

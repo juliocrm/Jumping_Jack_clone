@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using JumpingJack.Managers;
 
 namespace JumpingJack.UI
 {
@@ -13,6 +14,7 @@ namespace JumpingJack.UI
         [SerializeField] private string[] infoTexts;
 
         [SerializeField] GameObject background;
+        [SerializeField] private GameObject replayTExtParent;
 
 
         #region Singleton
@@ -43,6 +45,7 @@ namespace JumpingJack.UI
 
         public void StartScreen(int nextEnemies, int infoIndex)
         {
+            replayTExtParent.SetActive(false);
             if (nextEnemies == 1)
                 nextLevelText.text = "NEXT LEVEL - " + nextEnemies.ToString() + " HAZARD";
             else
@@ -68,6 +71,9 @@ namespace JumpingJack.UI
                 infoText.text = s;
                 yield return new WaitForSeconds(0.1f);
             }
+
+            if (LevelMgr.Instance.ActualLevel == 21)
+                replayTExtParent.SetActive(true);
         }
 
         public void EnableScreen()
