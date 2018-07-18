@@ -81,8 +81,10 @@ namespace JumpingJack.Controllers
         public void LoseLife()
         {
             Lifes--;
+            vidas = Lifes;
             InGameUI.Instance.SetLifes(Lifes);
         }
+        public int vidas;
 
     } // Class
 } // namespace

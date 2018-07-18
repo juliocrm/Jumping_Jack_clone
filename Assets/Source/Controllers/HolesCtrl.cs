@@ -145,7 +145,7 @@ namespace JumpingJack.Controllers
             for(int i = 0; i < holesList.Count; i++)
             {
                 if (holesList[i].cellPos.x <= avatarCell.x &&
-                    holesList[i].cellPos.x <= avatarCell.x + 2)
+                    (avatarCell.x - holesList[i].cellPos.x) <=  2)
                 {
                     if (holesList[i].cellPos.y == avatarCell.y)
                         return true;

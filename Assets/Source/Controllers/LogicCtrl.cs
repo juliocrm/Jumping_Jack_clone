@@ -119,9 +119,12 @@ namespace JumpingJack.Controllers
                 AvatarCtrl.Instance.Falling();
 
                 if (LifePointsCtrl.Instance.Lifes == 0)
+                {
                     AvatarCtrl.Instance.Falling();
                     logicState = State.GameOver;
-                return;
+
+                }
+                    return;
             }
 
             //if (skipFallingTest == 0)
@@ -176,9 +179,9 @@ namespace JumpingJack.Controllers
             if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
             {
                 if (AvatarCtrl.Instance.cellPosition.y == 0)
-                    return 3;
+                    return 3; // pierde vida
                 else
-                return 0;
+                    return 0;
             }
             
                                     
@@ -200,12 +203,12 @@ namespace JumpingJack.Controllers
             if (InputMgr.JumpPressed)
             {
                 standing = false;
-
-                if (TestJump() == 0)
+                int testJump = TestJump();
+                if (testJump == 0)
                     AvatarCtrl.Instance.BadJump();
 
 
-                else if (TestJump() == 1)
+                else if (testJump == 1)
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
 
@@ -213,7 +216,7 @@ namespace JumpingJack.Controllers
                     HolesCtrl.Instance.AddHoles(1);
                     AvatarCtrl.Instance.Jump();
                 }
-                else if (TestJump() == 2)
+                else if (testJump == 2)
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
@@ -221,7 +224,7 @@ namespace JumpingJack.Controllers
                     HolesCtrl.Instance.AddHoles(1);
                     logicState = State.FinishingLevel;
                 }
-                else if(TestJump() == 3)
+                else if (testJump == 3)
                 {
                     LifePointsCtrl.Instance.LoseLife();
 
