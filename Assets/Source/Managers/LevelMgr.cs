@@ -45,6 +45,8 @@ namespace JumpingJack.Managers
 
         public void PlayNewGame()
         {
+            AvatarCtrl.Instance.ResetAvatar();
+            LifePointsCtrl.Instance.SetLives(GameMgr_JJ.Instance.lifes);
             ActualLevel = 1;
             EndLevelUI.Instance.DisableScreen();
             
@@ -60,7 +62,6 @@ namespace JumpingJack.Managers
 
             LogicCtrl.Instance.PlayLevel();
             
-            AvatarCtrl.Instance.ResetAvatar();
         }
 
         public void GameOver()

@@ -81,6 +81,10 @@ namespace JumpingJack.Managers
 
             audioSource.Play();
         }
+        public void StopSound()
+        {
+            audioSource.Stop();
+        }
 
     } // Class
 } // namespace

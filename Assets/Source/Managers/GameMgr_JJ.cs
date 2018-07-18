@@ -11,7 +11,7 @@ namespace JumpingJack.Managers
     public class GameMgr_JJ : MonoBehaviour {
         
         [SerializeField] private float _tic = 0.087f;
-        [SerializeField] private int lifes = 6;
+        [SerializeField] public int lifes = 6;
 
         private enum States {   Starting,
                                 Playing,
