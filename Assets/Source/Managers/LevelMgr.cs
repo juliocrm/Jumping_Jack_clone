@@ -45,6 +45,7 @@ namespace JumpingJack.Managers
 
         public void PlayNewGame()
         {
+            ActualLevel = 1;
             EndLevelUI.Instance.DisableScreen();
             
             GenerateLines();
@@ -57,7 +58,6 @@ namespace JumpingJack.Managers
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
 
 
-            ActualLevel = 1;
             LogicCtrl.Instance.PlayLevel();
             
             AvatarCtrl.Instance.ResetAvatar();
