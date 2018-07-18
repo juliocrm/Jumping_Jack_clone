@@ -8,7 +8,7 @@ namespace JumpingJack.Controllers
 {
     public class EnemiesCtrl : MonoBehaviour
     {
-        [SerializeField] private GameObject[] enemyPrefabsList;
+        public GameObject[] enemyPrefabsList;
         List<Enemy> enemiesList = new List<Enemy>();
         public static bool ready = false;
 
@@ -38,7 +38,7 @@ namespace JumpingJack.Controllers
         // Use this for initialization
         void Start()
         {
-            #region Asignacion de colores a indices
+
             enemyColorsDic.Add(0, EnemyColors.Blue);
             enemyColorsDic.Add(6, EnemyColors.Blue);
             enemyColorsDic.Add(12, EnemyColors.Blue);
@@ -61,11 +61,11 @@ namespace JumpingJack.Controllers
             enemyColorsDic.Add(5, EnemyColors.Red);
             enemyColorsDic.Add(11, EnemyColors.Red);
             enemyColorsDic.Add(17, EnemyColors.Red);
-            #endregion
+
 
             ready = true;
         }
-        
+
 
         public void Tic(int frame)
         {
@@ -78,6 +78,47 @@ namespace JumpingJack.Controllers
 
         List<int> prefabsRandomIndex = new List<int>();
 
+
+        //public void InstanceEnemies(int _enemies)
+        //{
+        //    StartCoroutine((InstanceWithDelay(_enemies)));
+        //}
+        public void printSomething()
+        {
+            Debug.Log("Algo1");
+            Debug.Log("Algo2");
+
+        }
+
+        public void InstanceEnemies(int countEnemies)
+        {
+            List<GameObject> goList = new List<GameObject>();
+            GerRandomIndex(ref prefabsRandomIndex, countEnemies);
+
+            for (int i = 0; i < countEnemies; i++)
+            {
+                //yield return new WaitForFixedUpdate();
+                goList.Add(Instantiate(enemyPrefabsList[prefabsRandomIndex[i]
+                    ]));
+                
+            }
+            for (int i = 0; i< countEnemies; i++)
+            {
+                Enemy enemy = new Enemy();
+                enemy.primarySprite = goList[i].GetComponent<Transform>();
+
+                enemy.primarySprite.GetComponentInChildren<SpriteRenderer>().color = GetColor(i);
+
+                enemy.cellPos = GetRandomCell();
+
+                enemy.SetScale(new Vector3(GameScreenCoords.Units,
+                GameScreenCoords.Units, 1));
+
+                enemiesList.Add(enemy);
+            }
+            
+        }
+        
         public void Init(int enemies)
         {
             Debug.Log("0");
@@ -85,31 +126,19 @@ namespace JumpingJack.Controllers
                 return;
 
             GerRandomIndex(ref prefabsRandomIndex, enemies);
-            //prefabsRandomIndex.Add(0);
-            //prefabsRandomIndex.Add(1);
-            //prefabsRandomIndex.Add(2);
-            //prefabsRandomIndex.Add(3);
-            //prefabsRandomIndex.Add(4);
-            //prefabsRandomIndex.Add(5);
-            //prefabsRandomIndex.Add(6);
-            //prefabsRandomIndex.Add(7);
-            //prefabsRandomIndex.Add(8);
-            //prefabsRandomIndex.Add(9);
-            //prefabsRandomIndex.Add(1);
-            
             for (int i = 0; i < enemies; i ++)
             {
-                Enemy enemy = new Enemy(Instantiate(enemyPrefabsList[prefabsRandomIndex[i]]).transform);
+                Enemy enemy = new Enemy();
+                    enemy.primarySprite = Instantiate(enemyPrefabsList[prefabsRandomIndex[i]]).GetComponent<Transform>();
+
                 enemy.primarySprite.GetComponentInChildren<SpriteRenderer>().color =
                     GetColor(i);
 
                 enemy.cellPos = GetRandomCell();
                 enemiesList.Add(enemy);
-                enemiesList[i].SetScale(new Vector3(GameScreenCoords.Units,
-                                                    GameScreenCoords.Units,1));
             }
         }
-
+        
         private Color GetColor(int index)
         {
             switch (enemyColorsDic[index])
@@ -153,9 +182,7 @@ namespace JumpingJack.Controllers
                 outEnemies.Add(tempEnemies[index]);
                 tempEnemies.RemoveAt(index);
             }
-            /*
-            Debug.Log("enemies ready");
-            */
+            
             return outEnemies;
         }
 
@@ -194,19 +221,26 @@ namespace JumpingJack.Controllers
             bool dif = false;
             while (!dif)
             {
-                cellPos = new Vector2(Random.Range(1, 10) * 3,
-                    Random.Range(1, 7) * 3);
+                cellPos = new Vector2(Random.Range(0,29),
+                    Random.Range(1, 8)*3);
                 dif = true;
                 if (enemiesList.Count != 0)
+                {
                     for (int i = 0; i < enemiesList.Count; i++)
                     {
-                        if (cellPos.x - 3 < enemiesList[i].cellPos.x &&
-                            enemiesList[i].cellPos.x < cellPos.x + 3)
-                            
-                                dif = false;
+                        if (cellPos.y != enemiesList[i].cellPos.y)
+                            continue;
+                        if (cellPos.x - 4 >= enemiesList[i].cellPos.x ||
+                            (cellPos.x + 4 <= enemiesList[i].cellPos.x))
+                            continue;
+                        else
+                        {
+                            dif = false;
+                            break;
+                        }
                     }
+                }
             }
-            Debug.Log("Random Finished");
             return cellPos;
         }
 
@@ -252,6 +286,8 @@ namespace JumpingJack.Controllers
         {
             primarySprite = _transform;
         }
+
+        public Enemy() { }
 
         public void Tick(int frame)
         {

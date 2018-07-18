@@ -45,12 +45,13 @@ namespace JumpingJack.Managers
 
         public void PlayNewGame()
         {
+            AvatarCtrl.Instance.ResetAvatar();
+            LifePointsCtrl.Instance.SetLives(GameMgr_JJ.Instance.lifes);
+            ActualLevel = 1;
             EndLevelUI.Instance.DisableScreen();
-
-            //GameOverUI.Instance.CloseScreen();
+            
             GenerateLines();
-            //EnemiesCtrl.Instance.Init(4);
-            Debug.Log("Playing game");
+
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
             InGameUI.Instance.SetMaxScore(PersistenceMgr.MaxScore);
@@ -59,10 +60,8 @@ namespace JumpingJack.Managers
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
 
 
-            ActualLevel = 1;
             LogicCtrl.Instance.PlayLevel();
             
-            AvatarCtrl.Instance.ResetAvatar();
         }
 
         public void GameOver()
@@ -102,7 +101,7 @@ namespace JumpingJack.Managers
             ActualLevel++;
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), 1);
             HolesCtrl.Instance.AddHoleIn(new Vector2(12, 21), -1);
-            EnemiesCtrl.Instance.Init(ActualLevel - 1);
+            EnemiesCtrl.Instance.InstanceEnemies(ActualLevel - 1);
             LogicCtrl.Instance.ResetGame();
             AvatarCtrl.Instance.ResetAvatar();
 

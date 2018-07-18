@@ -40,6 +40,8 @@ namespace JumpingJack.UI
         // Use this for initialization
         void Start()
         {
+            NormalizeText(ref infoText, textSizeproportion);
+
             DisableScreen();
         }
 
@@ -73,7 +75,34 @@ namespace JumpingJack.UI
             }
 
             if (LevelMgr.Instance.ActualLevel == 21)
+            {
                 replayTExtParent.SetActive(true);
+                StartCoroutine(ReadEnterCoroutina());
+            }
+        }
+
+        public float textSizeproportion;
+        public RectTransform textBox;
+        private void NormalizeText(ref Text text, float proportion)
+        {
+            int sizeText = Mathf.CeilToInt(textBox.rect.height * proportion);
+
+            text.fontSize = Mathf.CeilToInt(textBox.rect.height * proportion);
+        }
+
+        private IEnumerator ReadEnterCoroutina()
+        {
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
+                if (InputMgr.EnterPressed)
+                {
+
+                    GameMgr_JJ.Instance.PlayNewGame();
+                    DisableScreen();
+                    break;
+                }
+            }
         }
 
         public void EnableScreen()
@@ -83,6 +112,8 @@ namespace JumpingJack.UI
 
         public void DisableScreen()
         {
+            replayTExtParent.SetActive(false);
+
             nextLevelText.text = "";
             infoText.text = "";
             background.SetActive(false);

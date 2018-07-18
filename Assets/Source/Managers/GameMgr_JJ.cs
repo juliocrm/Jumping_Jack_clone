@@ -11,7 +11,7 @@ namespace JumpingJack.Managers
     public class GameMgr_JJ : MonoBehaviour {
         
         [SerializeField] private float _tic = 0.087f;
-        [SerializeField] private int lifes = 6;
+        [SerializeField] public int lifes = 6;
 
         private enum States {   Starting,
                                 Playing,
@@ -50,21 +50,17 @@ namespace JumpingJack.Managers
             yield return new WaitForSeconds(0.1f);
 
             actualTic = _tic;
-#if UNITY_EDITOR
-            var localInit = StartCoroutine(Init());
-#else
 
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
             
             var localInit = StartCoroutine(Init());
             
             yield return loadingCoroutine;
-#endif
+
             yield return localInit;
-#if UNITY_EDITOR
-#else
+
             LoadingUI.Instance.Stop();
-#endif
+
 
             PlayNewGame();
         }

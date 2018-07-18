@@ -93,11 +93,21 @@ namespace JumpingJack.Controllers
                         LevelCompleted();
                     }
                 }
+                if(logicState == State.GameOver)
+                {
+                    if(gameOverLastTicks == 8)
+                    {
+                        GameOver();
+                        gameOverLastTicks = 0;
+                    }
+                    gameOverLastTicks++;
+                }
 
                 UpdateLogic();
                 tick = 0;
             }
         }
+        private int gameOverLastTicks = 0;
 
         public void UpdateLogic()
         {
@@ -107,9 +117,10 @@ namespace JumpingJack.Controllers
             else if (TestFallingInHoles() == 2) {
                 LifePointsCtrl.Instance.LoseLife();
                 AvatarCtrl.Instance.Falling();
-                
+
                 if (LifePointsCtrl.Instance.Lifes == 0)
-                    GameOver();
+                    AvatarCtrl.Instance.Falling();
+                    logicState = State.GameOver;
                 return;
             }
 
@@ -163,7 +174,13 @@ namespace JumpingJack.Controllers
                 return 1;
 
             if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
+            {
+                if (AvatarCtrl.Instance.cellPosition.y == 0)
+                    return 3;
+                else
                 return 0;
+            }
+            
                                     
             return 1; // Salta a siguiente
         }
@@ -203,6 +220,15 @@ namespace JumpingJack.Controllers
                     //skipFallingTest += 16;
                     HolesCtrl.Instance.AddHoles(1);
                     logicState = State.FinishingLevel;
+                }
+                else if(TestJump() == 3)
+                {
+                    LifePointsCtrl.Instance.LoseLife();
+
+                    AvatarCtrl.Instance.BadJump();
+
+                    if (LifePointsCtrl.Instance.Lifes == 0)
+                        logicState = State.GameOver;
                 }
             }
 
@@ -247,6 +273,9 @@ namespace JumpingJack.Controllers
 
         public void GameOver()
         {
+            AvatarCtrl.Instance.actualState = AvatarCtrl.States.other;
+            AvatarCtrl.Instance.Standing();
+            AudioMgr.Instance.StopSound();
             GameMgr_JJ.Instance.StopTics();
             
             logicState = State.GameOver;
