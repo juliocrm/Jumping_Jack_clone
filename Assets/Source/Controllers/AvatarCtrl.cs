@@ -373,7 +373,7 @@ namespace JumpingJack.Controllers
                 GameMgr_JJ.Instance.MultiplyTickDelay(10f);
 
 
-                AvatarCtrl.Instance.AddKickedFrames(55); // 2.93sec
+                AvatarCtrl.Instance.AddKickedFrames(40); // 2.93sec
             }
 
             AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame -1) / 3.0f));
@@ -394,7 +394,7 @@ namespace JumpingJack.Controllers
         public override void Tic(int frame)
         {
             if(frame == 1)
-                AvatarCtrl.Instance.AddKickedFrames(65); //1.91sec
+                AvatarCtrl.Instance.AddKickedFrames(40); //1.91sec
             if (frame == 4)
                 AvatarCtrl.Instance.KnockOut();
         }
@@ -408,7 +408,7 @@ namespace JumpingJack.Controllers
             if (frame == 1)
             {
                 
-                AvatarCtrl.Instance.AddKickedFrames(115); // 3.05sec
+                AvatarCtrl.Instance.AddKickedFrames(60); // 3.05sec
             }
             if (frame == 2)
             {

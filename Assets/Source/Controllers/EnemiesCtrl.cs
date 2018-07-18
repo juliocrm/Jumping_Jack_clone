@@ -79,10 +79,10 @@ namespace JumpingJack.Controllers
         List<int> prefabsRandomIndex = new List<int>();
 
 
-        public void InstanceEnemies(int _enemies)
-        {
-            StartCoroutine((InstanceWithDelay(_enemies)));
-        }
+        //public void InstanceEnemies(int _enemies)
+        //{
+        //    StartCoroutine((InstanceWithDelay(_enemies)));
+        //}
         public void printSomething()
         {
             Debug.Log("Algo1");
@@ -90,14 +90,14 @@ namespace JumpingJack.Controllers
 
         }
 
-        List<GameObject> goList = new List<GameObject>();
-        private IEnumerator InstanceWithDelay(int countEnemies)
+        public void InstanceEnemies(int countEnemies)
         {
+            List<GameObject> goList = new List<GameObject>();
             GerRandomIndex(ref prefabsRandomIndex, countEnemies);
 
             for (int i = 0; i < countEnemies; i++)
             {
-                yield return new WaitForFixedUpdate();
+                //yield return new WaitForFixedUpdate();
                 goList.Add(Instantiate(enemyPrefabsList[prefabsRandomIndex[i]
                     ]));
                 
@@ -116,6 +116,7 @@ namespace JumpingJack.Controllers
 
                 enemiesList.Add(enemy);
             }
+            
         }
         
         public void Init(int enemies)

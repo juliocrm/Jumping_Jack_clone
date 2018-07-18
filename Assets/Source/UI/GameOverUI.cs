@@ -43,10 +43,25 @@ namespace JumpingJack.UI
 
         public void StartScreen(int score, int enemies, bool newHiScore)
         {
+            Debug.Log("Score: " + score);
             parentGO.SetActive(true);
-            scoreText.text = score.ToString();
+            string s = "";
+            FillString(ref s, 10000, score);
+            s += score;
+            scoreText.text = s;
+
             enemiesText.text = enemies.ToString();
             StartCoroutine(StartScreenCoroutine(newHiScore));
+        }
+
+        private void FillString(ref string s, int max, int value)
+        {
+            if (max > 1)
+                if (value < max)
+                {
+                    s += "0";
+                    FillString(ref s, max / 10, value);
+                }
         }
 
         private IEnumerator StartScreenCoroutine(bool newHiScore)
@@ -56,7 +71,7 @@ namespace JumpingJack.UI
 
             pointsParent.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.7f);
-
+            
             if (newHiScore)
             {
                 newHiScoreGO.SetActive(true);

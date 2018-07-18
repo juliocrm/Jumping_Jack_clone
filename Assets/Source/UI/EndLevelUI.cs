@@ -40,6 +40,8 @@ namespace JumpingJack.UI
         // Use this for initialization
         void Start()
         {
+            NormalizeText(ref infoText, textSizeproportion);
+
             DisableScreen();
         }
 
@@ -74,6 +76,15 @@ namespace JumpingJack.UI
 
             if (LevelMgr.Instance.ActualLevel == 21)
                 replayTExtParent.SetActive(true);
+        }
+
+        public float textSizeproportion;
+        public RectTransform textBox;
+        private void NormalizeText(ref Text text, float proportion)
+        {
+            int sizeText = Mathf.CeilToInt(textBox.rect.height * proportion);
+            Debug.Log("Size: " + sizeText);
+            text.fontSize = Mathf.CeilToInt(textBox.rect.height * proportion);
         }
 
         public void EnableScreen()
