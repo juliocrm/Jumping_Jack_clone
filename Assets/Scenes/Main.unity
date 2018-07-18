@@ -1515,7 +1515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyContact: 1
   falling: 1
-  alwaysJumping: 1
+  alwaysJumping: 0
 --- !u!1 &441091791
 GameObject:
   m_ObjectHideFlags: 0
@@ -2632,7 +2632,7 @@ RectTransform:
   m_GameObject: {fileID: 1163982052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.03521127, y: 0.03521127, z: 0.03521127}
+  m_LocalScale: {x: 0.042918455, y: 0.042918455, z: 0.042918455}
   m_Children:
   - {fileID: 1156455807}
   - {fileID: 767905209}
@@ -2642,7 +2642,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 284}
+  m_SizeDelta: {x: 0, y: 233}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1163982054
 MonoBehaviour:
@@ -3561,7 +3561,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1528076702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9, y: 0, z: 0}
+  m_LocalPosition: {x: -9.69, y: 9.42, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_Children:
   - {fileID: 835531025}
@@ -3805,7 +3805,7 @@ RectTransform:
   m_GameObject: {fileID: 1564099061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.03521127, y: 0.03521127, z: 0.03521127}
+  m_LocalScale: {x: 0.042918455, y: 0.042918455, z: 0.042918455}
   m_Children:
   - {fileID: 1075406817}
   m_Father: {fileID: 0}
@@ -3814,7 +3814,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 284}
+  m_SizeDelta: {x: 0, y: 233}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1564099066
 MonoBehaviour:
