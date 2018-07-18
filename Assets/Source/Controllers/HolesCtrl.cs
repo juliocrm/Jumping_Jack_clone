@@ -121,6 +121,7 @@ namespace JumpingJack.Controllers
             hole.cellPos = cellPos;
             hole.moveDirection = direction;
             hole.primarySprite = Instantiate(holeMaskPrefab).transform;
+            
             hole.SetScale(new Vector3(GameScreenCoords.Units,
                                         GameScreenCoords.Units, 1));
             
@@ -181,6 +182,8 @@ namespace JumpingJack.Controllers
 
         public Vector2 cellPos = new Vector2();
 
+        private Vector3 tempV3;
+
         public Hole(Vector2 cellPosition, int direction)
         {
             moveDirection = direction;
@@ -196,9 +199,12 @@ namespace JumpingJack.Controllers
 
         public void Tic(int frame)
         {
+            tempV3 = GameScreenCoords.CellToWorld(cellPos);
+            tempV3.x += GameScreenCoords.subUnit * (frame - 1) * moveDirection;
+            primarySprite.position = tempV3;
+            
             if (frame == 4)
             {
-                primarySprite.position = GameScreenCoords.CellToWorld(cellPos);
 
                 if (moveDirection == 1)
                 {
