@@ -14,6 +14,7 @@ namespace JumpingJack.Utilities
         [Tooltip("Porcentaje (en decimales) del borde superior que dejaremos para el juego.")]
         [SerializeField] float upper = 0.1f;
         
+        public static float subUnit { get; private set; }
         public static float Units { get; private set; }
         private static Vector3 origin = Vector3.zero;
         private static Vector3 tempV3 = Vector3.zero;
@@ -41,6 +42,8 @@ namespace JumpingJack.Utilities
 
             origin.x = -16 * Units;
             origin.y = -12 * Units;
+
+            subUnit = Units / 3;
 
             UnitsReady = true;
         }

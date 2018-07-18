@@ -12,6 +12,16 @@ namespace JumpingJack.Controllers
         private int avatarLives = 6;
         private int actualLevel = 0;
 
+        // Comprueba si se ha presionado el botón de correr a
+        // izq o der o jump, sino, permite ir al estado standing.
+        private bool standing = true;
+
+        // Cuneta unos últimos tics antes de mostrar la pantalla 
+        // de presentación del siguiente nivel. Así permite la 
+        // última animación de saltar del Avatar.
+        private int finishLevelTics;
+
+
         private enum State{ Default,
                             Paused,
                             Playing,
@@ -69,7 +79,17 @@ namespace JumpingJack.Controllers
             if (tick == 4)
             {
                 if (logicState == State.FinishingLevel)
-                    LevelCompleted();
+                {
+                    if (finishLevelTics == 0)
+                        AvatarCtrl.Instance.Jump();
+
+                    finishLevelTics++;
+                    if (finishLevelTics == 2)
+                    {
+                        finishLevelTics = 0;
+                        LevelCompleted();
+                    }
+                }
 
                 UpdateLogic();
                 tick = 0;
@@ -146,17 +166,20 @@ namespace JumpingJack.Controllers
 
         private void ApplyInput()
         {
-            AvatarCtrl.Instance.Standing();
             if (InputMgr.LeftPressed)
             {
+                standing = false;
                 AvatarCtrl.Instance.RunLeft();
             }
             if (InputMgr.RightPressed)
             {
+                standing = false;
                 AvatarCtrl.Instance.RunRight();
             }
             if (InputMgr.JumpPressed)
             {
+                standing = false;
+
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
@@ -178,24 +201,42 @@ namespace JumpingJack.Controllers
                     logicState = State.FinishingLevel;
                 }
             }
+
+            if (standing) {
+                AvatarCtrl.Instance.Standing();
+            }
+            else
+                standing = true;
+
         }
 
         public void LevelCompleted()
         {
+            StartCoroutine(LevelCompleteCoroutine());
+        }
+
+        private IEnumerator LevelCompleteCoroutine()
+        {
             GameMgr_JJ.Instance.StopTics();
+            // TODO Play win music
+            yield return new WaitForSeconds(2);
 
             if (actualLevel == 21)
             {
                 logicState = State.GameOver;
+
                 // Lanzar pantalla de Final Juego
-                return;
+
+            }
+            else
+            {
+                logicState = State.ScoreScreen;
+
+                LevelMgr.Instance.LevelCompleted();
+
+                actualLevel++;
             }
 
-            logicState = State.ScoreScreen;
-
-            LevelMgr.Instance.LevelCompleted();
-
-            actualLevel++;
         }
 
         public void GameOver()
