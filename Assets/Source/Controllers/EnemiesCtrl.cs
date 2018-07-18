@@ -54,24 +54,25 @@ namespace JumpingJack.Controllers
             if (enemies == 0)
                 return;
 
-            //GerRandomIndex(ref prefabsRandomIndex, enemies);
-            prefabsRandomIndex.Add(0);
-            prefabsRandomIndex.Add(1);
-            prefabsRandomIndex.Add(2);
-            prefabsRandomIndex.Add(3);
-            prefabsRandomIndex.Add(4);
-            prefabsRandomIndex.Add(5);
-            prefabsRandomIndex.Add(6);
-            prefabsRandomIndex.Add(7);
-            prefabsRandomIndex.Add(8);
-            prefabsRandomIndex.Add(9);
-            prefabsRandomIndex.Add(1);
+            GerRandomIndex(ref prefabsRandomIndex, enemies);
+            //prefabsRandomIndex.Add(0);
+            //prefabsRandomIndex.Add(1);
+            //prefabsRandomIndex.Add(2);
+            //prefabsRandomIndex.Add(3);
+            //prefabsRandomIndex.Add(4);
+            //prefabsRandomIndex.Add(5);
+            //prefabsRandomIndex.Add(6);
+            //prefabsRandomIndex.Add(7);
+            //prefabsRandomIndex.Add(8);
+            //prefabsRandomIndex.Add(9);
+            //prefabsRandomIndex.Add(1);
 
 
 
             Debug.Log("0_0");
             for (int i = 0; i < enemies; i ++)
             {
+                Debug.Log("Instanciando enemies");
                 Enemy enemy = new Enemy(Instantiate(enemyPrefabsList[prefabsRandomIndex[i]]).transform);
 
                 enemy.cellPos = GetRandomCell();

@@ -144,19 +144,23 @@ namespace JumpingJack.Controllers
             return 1; // Salta a siguiente
         }
 
+        private bool standing = true;
         private void ApplyInput()
         {
-            AvatarCtrl.Instance.Standing();
             if (InputMgr.LeftPressed)
             {
+                standing = false;
                 AvatarCtrl.Instance.RunLeft();
             }
             if (InputMgr.RightPressed)
             {
+                standing = false;
                 AvatarCtrl.Instance.RunRight();
             }
             if (InputMgr.JumpPressed)
             {
+                standing = false;
+
                 if (TestJump() == 0)
                     AvatarCtrl.Instance.BadJump();
 
@@ -178,6 +182,13 @@ namespace JumpingJack.Controllers
                     logicState = State.FinishingLevel;
                 }
             }
+
+            if (standing) {
+                AvatarCtrl.Instance.Standing();
+            }
+            else
+                standing = true;
+
         }
 
         public void LevelCompleted()

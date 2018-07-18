@@ -9,6 +9,10 @@ namespace JumpingJack.Controllers
 {
     public class AvatarCtrl : MonoBehaviour
     {
+        public Transform primaryTransform;
+
+        [HideInInspector] public Animator primaryAnimator;
+
 
         private Vector2 _InitialPosition = Vector2.zero;
         [HideInInspector] public Vector2 cellPosition;
@@ -62,6 +66,8 @@ namespace JumpingJack.Controllers
         // Use this for initialization
         void Start()
         {
+            primaryAnimator = primaryTransform.GetComponent<Animator>();
+
             _transform = GetComponent<Transform>();
             avatarState = standingState;
         }
@@ -94,6 +100,8 @@ namespace JumpingJack.Controllers
             {
                 avatarState = runningLeftState;
                 actualState = States.RunningLeft;
+
+                primaryAnimator.SetInteger("State", (int)States.RunningLeft);
             }
         }
 
@@ -104,6 +112,8 @@ namespace JumpingJack.Controllers
             {
                 avatarState = runningRightState;
                 actualState = States.RunningRight;
+
+                primaryAnimator.SetInteger("State", (int)States.RunningRight);
             }
         }
 
@@ -115,6 +125,8 @@ namespace JumpingJack.Controllers
             {
                 avatarState = jumpingState;
                 actualState = States.Jumping;
+
+                primaryAnimator.SetInteger("State", (int)States.Jumping);
             }
         }
 
@@ -133,6 +145,8 @@ namespace JumpingJack.Controllers
 
             avatarState = standingState;
             actualState = States.Standing;
+
+            primaryAnimator.SetInteger("State", (int)States.Standing);
         }
 
         public void Kicked()
@@ -142,12 +156,16 @@ namespace JumpingJack.Controllers
 
             avatarState = kickedState;
             actualState = States.Kicked;
+
+            primaryAnimator.SetInteger("State", (int)States.KnockOut);
         }
 
         public void Falling()
         {
             avatarState = fallingState;
             actualState = States.Falling;
+
+            primaryAnimator.SetInteger("State", (int)States.Falling);
         }
 
         public void BadJump()
@@ -157,12 +175,15 @@ namespace JumpingJack.Controllers
 
             avatarState = badJumpState;
             actualState = States.BadJump;
+
+            primaryAnimator.SetInteger("State", (int)States.BadJump);
         }
 
         public void KnockOut()
         {
             avatarState = knockOutState;
             actualState = States.KnockOut;
+
         }
 
         #endregion
@@ -196,13 +217,16 @@ namespace JumpingJack.Controllers
 
     public class AvatarRunningLeft : AvatarStateBase
     {
+        Vector3 tempV3;
         public override void Tic(int frame)
         {
-            if(frame == 1) {
-                // Determinar si esta en el borde
-                // StartAnim
-            }
-            if(frame == 4)
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame-1) / 3.0f));
+
+            tempV3= GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
+            tempV3.x -= GameScreenCoords.subUnit * (frame-1) ;
+            AvatarCtrl.Instance._transform.position = tempV3;
+            
+            if (frame == 4)
             {
                 if (AvatarCtrl.Instance.cellPosition.x - 1 == -1)
                 {
@@ -213,7 +237,6 @@ namespace JumpingJack.Controllers
                 {
                     AvatarCtrl.Instance.cellPosition.x -= 1;
 
-                    AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
                 }
             }
         }
@@ -221,12 +244,15 @@ namespace JumpingJack.Controllers
 
     public class AvatarRunnigRight : AvatarStateBase
     {
+        Vector3 tempV3;
         public override void Tic(int frame)
         {
-            if(frame == 1)
-            {
-                // Determinar si esta en el borde
-            }
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
+
+            tempV3 = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
+            tempV3.x += GameScreenCoords.subUnit * (frame - 1);
+            AvatarCtrl.Instance._transform.position = tempV3;
+
             if (frame == 4)
             {
 
@@ -252,17 +278,24 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                GameMgr_JJ.Instance.MultiplyTickDelay(20f);
+                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Jumping);
+                GameMgr_JJ.Instance.MultiplyTickDelay(10f);
             }
-            if (frame == 4)
-            {
-                frameCount += frame;
-                if (frameCount == 8)
+
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frameCount) / 7.0f));
+            frameCount++;
+
+            if (frame == 2)
+                GameMgr_JJ.Instance.MultiplyTickDelay(5f);
+            else if(frame == 5)
+                GameMgr_JJ.Instance.MultiplyTickDelay(18f);
+
+            //if (frame == 4)
+            //{
+            if (frameCount == 8)
                 {
                     frameCount = 0;
-                }
-                else
-                {
+
                     GameMgr_JJ.Instance.MultiplyTickDelay(1f);
 
                     AvatarCtrl.Instance.cellPosition.y += 3;
@@ -270,15 +303,28 @@ namespace JumpingJack.Controllers
                     AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
 
                     AvatarCtrl.Instance.actualState = AvatarCtrl.States.Standing;
+
                 }
-            }
+                //else
+                //{
+                //}
+            //}
         }
     }
 
     public class AvatarStanding : AvatarStateBase
     {
+        int frameCount = 0;
         public override void Tic(int frame)
         {
+            if (frame == 1)
+            {
+                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Standing);
+            }
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frameCount) / 95.0f));
+            frameCount++;
+            if (frameCount == 96)
+                frameCount = 0;
 
         }
     }
@@ -289,12 +335,20 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                AvatarCtrl.Instance.cellPosition.y -= 3;
+                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Falling);
+                GameMgr_JJ.Instance.MultiplyTickDelay(10f);
+
 
                 AvatarCtrl.Instance.AddKickedFrames(55); // 2.93sec
             }
+
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame -1) / 3.0f));
+
             if (frame == 4)
             {
+                AvatarCtrl.Instance.cellPosition.y -= 3;
+                GameMgr_JJ.Instance.MultiplyTickDelay(1f);
+
                 AvatarCtrl.Instance.KnockOut();
                 AvatarCtrl.Instance._transform.position = GameScreenCoords.CellToWorld(AvatarCtrl.Instance.cellPosition);
             }
@@ -316,12 +370,20 @@ namespace JumpingJack.Controllers
     {
         public override void Tic(int frame)
         {
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
             if (frame == 1)
             {
+                
                 AvatarCtrl.Instance.AddKickedFrames(115); // 3.05sec
             }
+            if (frame == 2)
+            {
+                GameMgr_JJ.Instance.MultiplyTickDelay(30);
+            }
+
             if (frame == 4)
             {
+                GameMgr_JJ.Instance.MultiplyTickDelay(1);
                 AvatarCtrl.Instance.KnockOut();
             }
         }
@@ -331,7 +393,10 @@ namespace JumpingJack.Controllers
     {
         public override void Tic(int frame)
         {
-            // KnockOut Animation...
+            if (frame == 1)
+                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.KnockOut);
+
+            AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
         }
     }
 
