@@ -50,21 +50,17 @@ namespace JumpingJack.Managers
             yield return new WaitForSeconds(0.1f);
 
             actualTic = _tic;
-#if UNITY_EDITOR
-            var localInit = StartCoroutine(Init());
-#else
 
             var loadingCoroutine = StartCoroutine(LoadingUI.Instance.Play());
             
             var localInit = StartCoroutine(Init());
             
             yield return loadingCoroutine;
-#endif
+
             yield return localInit;
-#if UNITY_EDITOR
-#else
+
             LoadingUI.Instance.Stop();
-#endif
+
 
             PlayNewGame();
         }
