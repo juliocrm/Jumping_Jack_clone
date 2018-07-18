@@ -3391,6 +3391,13 @@ MonoBehaviour:
   - {fileID: 1839164780266610, guid: dd4a6fa5acb8fe049957f22d4a2272a2, type: 2}
   - {fileID: 1997729449142496, guid: 79b10cec48c8c834aba1422424c27a1c, type: 2}
   - {fileID: 1209795872049360, guid: bc570a2030bb7424b956149d16d169c8, type: 2}
+  enemyColors:
+  - {r: 0, g: 0.112, b: 1, a: 1}
+  - {r: 0.16716506, g: 0.5188679, b: 0.03671235, a: 1}
+  - {r: 0.8207547, g: 0.058072258, b: 0.5267083, a: 1}
+  - {r: 0.8827908, g: 0.9150943, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1456195051
 MonoBehaviour:
   m_ObjectHideFlags: 0

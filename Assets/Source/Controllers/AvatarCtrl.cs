@@ -10,10 +10,10 @@ namespace JumpingJack.Controllers
     public class AvatarCtrl : MonoBehaviour
     {
         public Transform primaryTransform;
+        public const string stateName = "State";
 
         [HideInInspector] public Animator primaryAnimator;
-
-
+        
         private Vector2 _InitialPosition = Vector2.zero;
         [HideInInspector] public Vector2 cellPosition;
         [HideInInspector] public Transform _transform;
@@ -101,7 +101,7 @@ namespace JumpingJack.Controllers
                 avatarState = runningLeftState;
                 actualState = States.RunningLeft;
 
-                primaryAnimator.SetInteger("State", (int)States.RunningLeft);
+                primaryAnimator.SetInteger(stateName, (int)States.RunningLeft);
             }
         }
 
@@ -113,7 +113,7 @@ namespace JumpingJack.Controllers
                 avatarState = runningRightState;
                 actualState = States.RunningRight;
 
-                primaryAnimator.SetInteger("State", (int)States.RunningRight);
+                primaryAnimator.SetInteger(stateName, (int)States.RunningRight);
             }
         }
 
@@ -126,7 +126,7 @@ namespace JumpingJack.Controllers
                 avatarState = jumpingState;
                 actualState = States.Jumping;
 
-                primaryAnimator.SetInteger("State", (int)States.Jumping);
+                primaryAnimator.SetInteger(stateName, (int)States.Jumping);
             }
         }
 
@@ -146,7 +146,7 @@ namespace JumpingJack.Controllers
             avatarState = standingState;
             actualState = States.Standing;
 
-            primaryAnimator.SetInteger("State", (int)States.Standing);
+            primaryAnimator.SetInteger(stateName, (int)States.Standing);
         }
 
         public void Kicked()
@@ -157,7 +157,7 @@ namespace JumpingJack.Controllers
             avatarState = kickedState;
             actualState = States.Kicked;
 
-            primaryAnimator.SetInteger("State", (int)States.KnockOut);
+            primaryAnimator.SetInteger(stateName, (int)States.KnockOut);
         }
 
         public void Falling()
@@ -165,7 +165,7 @@ namespace JumpingJack.Controllers
             avatarState = fallingState;
             actualState = States.Falling;
 
-            primaryAnimator.SetInteger("State", (int)States.Falling);
+            primaryAnimator.SetInteger(stateName, (int)States.Falling);
         }
 
         public void BadJump()
@@ -176,7 +176,7 @@ namespace JumpingJack.Controllers
             avatarState = badJumpState;
             actualState = States.BadJump;
 
-            primaryAnimator.SetInteger("State", (int)States.BadJump);
+            primaryAnimator.SetInteger(stateName, (int)States.BadJump);
         }
 
         public void KnockOut()
@@ -278,7 +278,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Jumping);
+                AvatarCtrl.Instance.primaryAnimator.SetInteger(AvatarCtrl.stateName, (int)AvatarCtrl.States.Jumping);
                 GameMgr_JJ.Instance.MultiplyTickDelay(10f);
             }
 
@@ -319,7 +319,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Standing);
+                AvatarCtrl.Instance.primaryAnimator.SetInteger(AvatarCtrl.stateName, (int)AvatarCtrl.States.Standing);
             }
             AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frameCount) / 95.0f));
             frameCount++;
@@ -335,7 +335,7 @@ namespace JumpingJack.Controllers
         {
             if (frame == 1)
             {
-                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.Falling);
+                AvatarCtrl.Instance.primaryAnimator.SetInteger(AvatarCtrl.stateName, (int)AvatarCtrl.States.Falling);
                 GameMgr_JJ.Instance.MultiplyTickDelay(10f);
 
 
@@ -394,7 +394,7 @@ namespace JumpingJack.Controllers
         public override void Tic(int frame)
         {
             if (frame == 1)
-                AvatarCtrl.Instance.primaryAnimator.SetInteger("State", (int)AvatarCtrl.States.KnockOut);
+                AvatarCtrl.Instance.primaryAnimator.SetInteger(AvatarCtrl.stateName, (int)AvatarCtrl.States.KnockOut);
 
             AvatarCtrl.Instance.primaryAnimator.Play(0, 0, ((frame - 1) / 3.0f));
         }

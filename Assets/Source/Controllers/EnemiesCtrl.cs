@@ -11,6 +11,11 @@ namespace JumpingJack.Controllers
         [SerializeField] private GameObject[] enemyPrefabsList;
         List<Enemy> enemiesList = new List<Enemy>();
         public static bool ready = false;
+
+        public Color[] enemyColors;
+        private enum EnemyColors { Blue,Green,Magenta,Yellow,Black,Red}
+        private Dictionary<int, EnemyColors> enemyColorsDic = new Dictionary<int, EnemyColors>();
+
         #region Singleton
         public static EnemiesCtrl Instance { get; private set; }
 
@@ -33,6 +38,31 @@ namespace JumpingJack.Controllers
         // Use this for initialization
         void Start()
         {
+            #region Asignacion de colores a indices
+            enemyColorsDic.Add(0, EnemyColors.Blue);
+            enemyColorsDic.Add(6, EnemyColors.Blue);
+            enemyColorsDic.Add(12, EnemyColors.Blue);
+            enemyColorsDic.Add(18, EnemyColors.Blue);
+            enemyColorsDic.Add(1, EnemyColors.Green);
+            enemyColorsDic.Add(7, EnemyColors.Green);
+            enemyColorsDic.Add(13, EnemyColors.Green);
+            enemyColorsDic.Add(19, EnemyColors.Green);
+            enemyColorsDic.Add(2, EnemyColors.Magenta);
+            enemyColorsDic.Add(8, EnemyColors.Magenta);
+            enemyColorsDic.Add(14, EnemyColors.Magenta);
+            enemyColorsDic.Add(20, EnemyColors.Magenta);
+            enemyColorsDic.Add(3, EnemyColors.Yellow);
+            enemyColorsDic.Add(9, EnemyColors.Yellow);
+            enemyColorsDic.Add(15, EnemyColors.Yellow);
+            enemyColorsDic.Add(21, EnemyColors.Yellow);
+            enemyColorsDic.Add(4, EnemyColors.Black);
+            enemyColorsDic.Add(10, EnemyColors.Black);
+            enemyColorsDic.Add(16, EnemyColors.Black);
+            enemyColorsDic.Add(5, EnemyColors.Red);
+            enemyColorsDic.Add(11, EnemyColors.Red);
+            enemyColorsDic.Add(17, EnemyColors.Red);
+            #endregion
+
             ready = true;
         }
         
@@ -66,14 +96,12 @@ namespace JumpingJack.Controllers
             //prefabsRandomIndex.Add(8);
             //prefabsRandomIndex.Add(9);
             //prefabsRandomIndex.Add(1);
-
-
-
-            Debug.Log("0_0");
+            
             for (int i = 0; i < enemies; i ++)
             {
-                Debug.Log("Instanciando enemies");
                 Enemy enemy = new Enemy(Instantiate(enemyPrefabsList[prefabsRandomIndex[i]]).transform);
+                enemy.primarySprite.GetComponentInChildren<SpriteRenderer>().color =
+                    GetColor(i);
 
                 enemy.cellPos = GetRandomCell();
                 enemiesList.Add(enemy);
@@ -82,12 +110,33 @@ namespace JumpingJack.Controllers
             }
         }
 
+        private Color GetColor(int index)
+        {
+            switch (enemyColorsDic[index])
+            {
+                case EnemyColors.Blue:
+                    return enemyColors[0];
+                case EnemyColors.Green:
+                    return enemyColors[1];
+                case EnemyColors.Magenta:
+                    return enemyColors[2];
+                case EnemyColors.Yellow:
+                    return enemyColors[3];
+                case EnemyColors.Black:
+                    return enemyColors[4];
+                case EnemyColors.Red:
+                    return enemyColors[5];
+                default:
+                    return Color.white;
+            }
+        }
+
         private List<GameObject> GetRandomEnemies(int count)
         {
             List<GameObject> outEnemies = new List<GameObject>();
 
             List<GameObject> tempEnemies = new List<GameObject>();
-            Debug.Log("1");
+            
             int j = 0;
             for (int i = 0; i < count; i++)
             {
@@ -97,7 +146,7 @@ namespace JumpingJack.Controllers
                 tempEnemies.Add(enemyPrefabsList[j]);
                 j++;
             }
-            Debug.Log("2: " + tempEnemies.Count);
+
             for(int i = 0; i< count; i++)
             {
                 int index = Random.Range(0, tempEnemies.Count);
@@ -143,7 +192,6 @@ namespace JumpingJack.Controllers
         {
             Vector2 cellPos = Vector2.zero;
             bool dif = false;
-            Debug.Log("3");
             while (!dif)
             {
                 cellPos = new Vector2(Random.Range(1, 10) * 3,

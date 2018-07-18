@@ -49,7 +49,7 @@ namespace JumpingJack.Managers
 
             //GameOverUI.Instance.CloseScreen();
             GenerateLines();
-            EnemiesCtrl.Instance.Init(4);
+            //EnemiesCtrl.Instance.Init(4);
             Debug.Log("Playing game");
             InGameUI.Instance.SetLifes(LifePointsCtrl.Instance.Lifes);
             InGameUI.Instance.SetScore(0);
