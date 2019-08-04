@@ -5,3 +5,5 @@ JumpingJack_clone.sln
 .vs/
 obj/
 Assembly-CSharp.csproj
+
+JumpingJack\.sln
