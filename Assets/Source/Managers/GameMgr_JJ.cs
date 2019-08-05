@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using JumpingJack.UI;
@@ -63,11 +62,6 @@ namespace JumpingJack.Managers
 
 
             PlayNewGame();
-        }
-
-        // Update is called once per frame
-        void Update() {
-
         }
 
         private IEnumerator Init()

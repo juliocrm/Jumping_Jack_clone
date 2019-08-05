@@ -1,6 +1,4 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using JumpingJack.Utilities;
 
 using JumpingJack.Managers;
@@ -224,6 +222,7 @@ namespace JumpingJack.Controllers
             cellPosition = _InitialPosition;
             SetSize();
             _transform.position = GameScreenCoords.CellToWorld(14,0);
+            actualKickedFrames = 0;
         }
 
         public void SetInitialPos(Vector2 position)
