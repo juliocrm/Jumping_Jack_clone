@@ -5,17 +5,27 @@ namespace JumpingJack.Managers
     public class CheatsMgr : MonoBehaviour
     {
         [SerializeField]
-        [Tooltip("Desactive para evitar el daño por contacto con enemigos.")]
+        [Tooltip("Preione 2 - Desactive para evitar el daño por contacto con enemigos.")]
         private bool enemyContact = true;
 
         [SerializeField]
-        [Tooltip("Desactive para caer por agujeros.")]
+        [Tooltip("Presione 1 - Desactive para caer por agujeros.")]
         private bool falling = true;
 
         [SerializeField]
-        [Tooltip("Active para saltar en cualquier lugar.")]
+        [Tooltip("Preseione 3 - Active para saltar en cualquier lugar.")]
         private bool alwaysJumping = false;
-        
+
+        [SerializeField]
+        [Tooltip("Presione 4 - Slow motion")]
+        private bool slowTime = false;
+
+        [SerializeField]
+        [Tooltip("Tiempo en segundos para activar cheat.")]
+        private int TimeToEnableCheat = 5;
+
+        private const float slowTimeScale = 0.3f;
+
         #region Singleton
         public static CheatsMgr Instance { get; private set; }
 
@@ -34,23 +44,22 @@ namespace JumpingJack.Managers
             }
         }
         #endregion
+        
+        private float alpha1Timer = 0;
+        private float alpha2Timer = 0;
+        private float alpha3Timer = 0;
+        private float alpha4Timer = 0;
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        private int alpha1Timer = 0;
-        private int alpha2Timer = 0;
-        private int alpha3Timer = 0;
         private void Update()
         {
             if (Input.GetKey(KeyCode.Alpha1))
             {
-                alpha1Timer++;
-                if (alpha1Timer == 180)
+                if (alpha1Timer == 0)
+                    alpha1Timer = Time.unscaledTime;
+                
+                if ((Time.unscaledTime - alpha1Timer) > TimeToEnableCheat)
                 {
+                    alpha1Timer = Time.unscaledTime;
                     falling = !falling;
                     AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
                 }
@@ -60,9 +69,12 @@ namespace JumpingJack.Managers
 
             if (Input.GetKey(KeyCode.Alpha2))
             {
-                alpha2Timer++;
-                if (alpha2Timer == 180)
+                if (alpha2Timer == 0)
+                    alpha2Timer = Time.unscaledTime;
+
+                if ((Time.unscaledTime - alpha2Timer) > TimeToEnableCheat)
                 {
+                    alpha2Timer = Time.unscaledTime;
                     enemyContact = !enemyContact;
                     AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
                 }
@@ -72,9 +84,12 @@ namespace JumpingJack.Managers
 
             if (Input.GetKey(KeyCode.Alpha3))
             {
-                alpha3Timer++;
-                if (alpha3Timer == 180)
+                if (alpha3Timer == 0)
+                    alpha3Timer = Time.unscaledTime;
+
+                if ((Time.unscaledTime - alpha3Timer) > TimeToEnableCheat)
                 {
+                    alpha3Timer = Time.unscaledTime;
                     alwaysJumping = !alwaysJumping;
                     AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
                 }
@@ -84,13 +99,20 @@ namespace JumpingJack.Managers
 
             if (Input.GetKey(KeyCode.Alpha4))
             {
-                Time.timeScale = 0.3f;
-            }
-            if (Input.GetKey(KeyCode.Alpha5))
-            {
-                Time.timeScale = 1;
-            }
+                if (alpha4Timer == 0)
+                    alpha4Timer = Time.unscaledTime;
 
+                if ((Time.unscaledTime - alpha4Timer) > TimeToEnableCheat)
+                {
+                    alpha4Timer = Time.unscaledTime;
+                    Time.timeScale = 0.3f;
+                    slowTime = !slowTime;
+                    Time.timeScale = slowTime ? slowTimeScale : 1;
+                    AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                }
+            }
+            else
+                alpha4Timer = 0;
         }
 
         public static bool EnemyContactEnabled()
