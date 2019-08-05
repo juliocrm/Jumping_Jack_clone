@@ -10,7 +10,7 @@ namespace JumpingJack.Managers
     public class GameMgr_JJ : MonoBehaviour {
         
         [SerializeField] private float _tic = 0.087f;
-        [SerializeField] public int lifes = 6;
+        [SerializeField] public int Lives = 6;
 
         private enum States {   Starting,
                                 Playing,
@@ -97,7 +97,7 @@ namespace JumpingJack.Managers
         public void PlayNewGame()
         {
             LifePointsCtrl.Instance.ResetData();
-            LifePointsCtrl.Instance.SetLives(lifes);
+            LifePointsCtrl.Instance.SetLives(Lives);
             LevelMgr.Instance.PlayNewGame();
             state = States.Playing;
         }

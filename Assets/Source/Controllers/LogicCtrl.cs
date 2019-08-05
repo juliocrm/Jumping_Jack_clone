@@ -33,7 +33,8 @@ namespace JumpingJack.Controllers
         private State logicState = State.Default;
 
         public enum FallingState{NotFalling, Falling, FallingDie}
-
+        public enum JumpState { HitLine, JumpClear, JumpLastLine, LostLife }
+        
         #region Singleton
         public static LogicCtrl Instance { get; private set; }
 
@@ -151,24 +152,23 @@ namespace JumpingJack.Controllers
             return EnemiesCtrl.Instance.TestEnemyIn(AvatarCtrl.Instance.cellPosition);                
         }
 
-        public int TestJump()
+        public JumpState TestJump()
         {
-            if (AvatarCtrl.Instance.cellPosition.y + 3 == 24)
-                return 2; // Última línea
-
             if (CheatsMgr.AlwaysJumpOK())
-                return 1;
+                return JumpState.JumpClear;
 
             if (!HolesCtrl.Instance.ExistHoleUp(AvatarCtrl.Instance.cellPosition))
             {
                 if (AvatarCtrl.Instance.cellPosition.y == 0)
-                    return 3; // pierde vida
+                    return JumpState.LostLife; // pierde vida
                 else
-                    return 0;
+                    return JumpState.HitLine;
             }
+
+            if (AvatarCtrl.Instance.cellPosition.y + 3 == 24)
+                return JumpState.JumpLastLine; // Última línea
             
-                                    
-            return 1; // Salta a siguiente
+            return JumpState.JumpClear; // Salta a siguiente
         }
 
         private void ApplyInput()
@@ -186,12 +186,11 @@ namespace JumpingJack.Controllers
             if (InputMgr.JumpPressed)
             {
                 standing = false;
-                int testJump = TestJump();
-                if (testJump == 0)
+                JumpState testJump = TestJump();
+                if (testJump == JumpState.HitLine)
                     AvatarCtrl.Instance.BadJump();
 
-
-                else if (testJump == 1)
+                else if (testJump == JumpState.JumpClear)
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
 
@@ -199,7 +198,7 @@ namespace JumpingJack.Controllers
                     HolesCtrl.Instance.AddHoles(1);
                     AvatarCtrl.Instance.Jump();
                 }
-                else if (testJump == 2)
+                else if (testJump == JumpState.JumpLastLine)
                 {
                     LifePointsCtrl.Instance.AddScore(5 * LevelMgr.Instance.ActualLevel);
                     // Avatar Last Jump Anim
@@ -207,7 +206,7 @@ namespace JumpingJack.Controllers
                     HolesCtrl.Instance.AddHoles(1);
                     logicState = State.FinishingLevel;
                 }
-                else if (testJump == 3)
+                else if (testJump == JumpState.LostLife)
                 {
                     LifePointsCtrl.Instance.LoseLife();
 
@@ -223,7 +222,6 @@ namespace JumpingJack.Controllers
             }
             else
                 standing = true;
-
         }
 
         public void LevelCompleted()
@@ -237,24 +235,18 @@ namespace JumpingJack.Controllers
             
             yield return new WaitForSeconds(2);
 
-            
-
             if (actualLevel == 21)
             {
                 logicState = State.GameOver;
 
                 // Lanzar pantalla de Final Juego
-
             }
             else
             {
                 logicState = State.ScoreScreen;
-
                 LevelMgr.Instance.LevelCompleted();
-
                 actualLevel++;
             }
-
         }
 
         public void GameOver()
@@ -271,7 +263,7 @@ namespace JumpingJack.Controllers
         
         public void ResetGame()
         {
-            avatarLives = 6;
+            avatarLives = GameMgr_JJ.Instance.Lives;
             actualLevel = 0;
         }
 
