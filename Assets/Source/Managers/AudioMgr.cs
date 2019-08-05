@@ -1,6 +1,4 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace JumpingJack.Managers
 {
@@ -13,8 +11,9 @@ namespace JumpingJack.Managers
         [SerializeField] private AudioClip knockOut;
         [SerializeField] private AudioClip falling;
         [SerializeField] private AudioClip win;
-        
-        private AudioSource audioSource;
+
+        [SerializeField] private AudioSource mainAudioSource;
+        [SerializeField] private AudioSource secondaryAudioSource;
 
         public enum AudioFx { Standing, Running, GoodJump,
                                 BadJump, KnockOut, Falling, Win}
@@ -39,51 +38,52 @@ namespace JumpingJack.Managers
         #endregion
 
 
-        // Use this for initialization
-        void Start()
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
-
         public void PlaySoundFx(AudioFx fx)
         {
             switch(fx)
             {
                 case AudioFx.BadJump:
-                    audioSource.loop = false;
-                    audioSource.clip = badJump;
+                    mainAudioSource.loop = false;
+                    mainAudioSource.clip = badJump;
                     break;
                 case AudioFx.GoodJump:
-                    audioSource.loop = false;
-                    audioSource.clip = goodJump;
+                    mainAudioSource.loop = false;
+                    mainAudioSource.clip = goodJump;
                     break;
                 case AudioFx.Falling:
-                    audioSource.loop = false;
-                    audioSource.clip = falling;
+                    mainAudioSource.loop = false;
+                    mainAudioSource.clip = falling;
                     break;
                 case AudioFx.Running:
-                    audioSource.loop = true;
-                    audioSource.clip = running;
+                    mainAudioSource.loop = true;
+                    mainAudioSource.clip = running;
                     break;
                 case AudioFx.KnockOut:
-                    audioSource.loop = true;
-                    audioSource.clip = knockOut;
+                    mainAudioSource.loop = true;
+                    mainAudioSource.clip = knockOut;
                     break;
                 case AudioFx.Standing:
-                    audioSource.loop = true;
-                    audioSource.clip = standing;
+                    mainAudioSource.loop = true;
+                    mainAudioSource.clip = standing;
                     break;
                 case AudioFx.Win:
-                    audioSource.loop = false;
-                    audioSource.clip = win;
+                    mainAudioSource.loop = false;
+                    mainAudioSource.clip = win;
                     break;
             }
 
-            audioSource.Play();
+            mainAudioSource.Play();
         }
+
+        public void PlayExtraSoundFx(AudioClip clip)
+        {
+            secondaryAudioSource.clip = clip;
+            secondaryAudioSource.Play();
+        }
+
         public void StopSound()
         {
-            audioSource.Stop();
+            mainAudioSource.Stop();
         }
 
     } // Class

@@ -26,6 +26,9 @@ namespace JumpingJack.Managers
 
         private const float slowTimeScale = 0.3f;
 
+        [SerializeField]
+        private AudioClip cheatEnableClip;
+
         #region Singleton
         public static CheatsMgr Instance { get; private set; }
 
@@ -61,7 +64,7 @@ namespace JumpingJack.Managers
                 {
                     alpha1Timer = Time.unscaledTime;
                     falling = !falling;
-                    AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                    AudioMgr.Instance.PlayExtraSoundFx(cheatEnableClip);
                 }
             }
             else
@@ -76,7 +79,7 @@ namespace JumpingJack.Managers
                 {
                     alpha2Timer = Time.unscaledTime;
                     enemyContact = !enemyContact;
-                    AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                    AudioMgr.Instance.PlayExtraSoundFx(cheatEnableClip);
                 }
             }
             else
@@ -91,7 +94,7 @@ namespace JumpingJack.Managers
                 {
                     alpha3Timer = Time.unscaledTime;
                     alwaysJumping = !alwaysJumping;
-                    AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                    AudioMgr.Instance.PlayExtraSoundFx(cheatEnableClip);
                 }
             }
             else
@@ -108,7 +111,7 @@ namespace JumpingJack.Managers
                     Time.timeScale = 0.3f;
                     slowTime = !slowTime;
                     Time.timeScale = slowTime ? slowTimeScale : 1;
-                    AudioMgr.Instance.PlaySoundFx(AudioMgr.AudioFx.GoodJump);
+                    AudioMgr.Instance.PlayExtraSoundFx(cheatEnableClip);
                 }
             }
             else
