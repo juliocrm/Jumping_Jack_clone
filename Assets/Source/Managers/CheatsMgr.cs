@@ -82,6 +82,15 @@ namespace JumpingJack.Managers
             else
                 alpha3Timer = 0;
 
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                Time.timeScale = 0.3f;
+            }
+            if (Input.GetKey(KeyCode.Alpha5))
+            {
+                Time.timeScale = 1;
+            }
+
         }
 
         public static bool EnemyContactEnabled()

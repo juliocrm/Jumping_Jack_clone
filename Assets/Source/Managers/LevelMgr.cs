@@ -33,7 +33,6 @@ namespace JumpingJack.Managers
         #endregion
 
 
-
         public void Init()
         {
             AvatarCtrl.Instance.SetInitialPos(new Vector2(14,0));
@@ -46,7 +45,7 @@ namespace JumpingJack.Managers
         public void PlayNewGame()
         {
             AvatarCtrl.Instance.ResetAvatar();
-            LifePointsCtrl.Instance.SetLives(GameMgr_JJ.Instance.lifes);
+            LifePointsCtrl.Instance.SetLives(GameMgr_JJ.Instance.Lives);
             ActualLevel = 1;
             EndLevelUI.Instance.DisableScreen();
             

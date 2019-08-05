@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using JumpingJack.UI;
@@ -11,7 +10,7 @@ namespace JumpingJack.Managers
     public class GameMgr_JJ : MonoBehaviour {
         
         [SerializeField] private float _tic = 0.087f;
-        [SerializeField] public int lifes = 6;
+        [SerializeField] public int Lives = 6;
 
         private enum States {   Starting,
                                 Playing,
@@ -65,11 +64,6 @@ namespace JumpingJack.Managers
             PlayNewGame();
         }
 
-        // Update is called once per frame
-        void Update() {
-
-        }
-
         private IEnumerator Init()
         {
             yield return new WaitWhile(() => GameScreenCoords.UnitsReady == false);
@@ -103,7 +97,7 @@ namespace JumpingJack.Managers
         public void PlayNewGame()
         {
             LifePointsCtrl.Instance.ResetData();
-            LifePointsCtrl.Instance.SetLives(lifes);
+            LifePointsCtrl.Instance.SetLives(Lives);
             LevelMgr.Instance.PlayNewGame();
             state = States.Playing;
         }
